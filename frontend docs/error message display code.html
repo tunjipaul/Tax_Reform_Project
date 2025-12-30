@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nigeria Tax Reform Assistant - Error State</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e1e8a",
+                        "accent": "#D4AF37", // Gold
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121220",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#121217] overflow-hidden h-screen flex">
+<!-- Sidebar -->
+<aside class="w-64 bg-primary flex-col hidden md:flex h-full shrink-0 transition-all duration-300">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border-2 border-white/20 shrink-0" data-alt="Nigerian Coat of Arms or Abstract Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCACWQdCC6HG_c8PQPgUUAhP2rgS79C1DgQRNB3TkGCLg_PG2z4CHwe-qDrdmcG91MMao_IiUxt9RsPmttdxLz8KIAtMZNpPOWSaupU5vaSEnRKUFJ8qpDmz8KPSwd2oUrjcG4D0Ra-JgBoE5zdvlEc87ZP_Lonji_BWroLbSyMpk6nGnl_VHymPGKBn-cMU9ngg248Yl9UWJXz2NEHZXw59d0bn8mGpg954_p9y5ui_mSJTsYN7j0qgC9aGl8Lg3A3mumZ1a-EhbOh");'></div>
+<div class="flex flex-col overflow-hidden">
+<h1 class="text-white text-base font-bold leading-normal truncate">Tax Assistant</h1>
+<p class="text-white/60 text-xs font-normal leading-normal truncate">Official Q&amp;A Portal</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-2">
+<!-- New Chat Button -->
+<button class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+<span class="material-symbols-outlined text-white" style="font-size: 20px;">add</span>
+<span class="text-sm font-medium">New Inquiry</span>
+</button>
+<div class="mt-6 mb-2 px-3">
+<p class="text-xs font-semibold text-white/40 uppercase tracking-wider">Recent</p>
+</div>
+<!-- Nav Items -->
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer bg-white/5 border border-white/10">
+<span class="material-symbols-outlined text-accent" style="font-size: 20px;">chat_bubble</span>
+<p class="text-white text-sm font-medium truncate">VAT Implications...</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/5 text-white/70 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">history</span>
+<p class="text-sm font-medium truncate">Company Tax 2024</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/5 text-white/70 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">history</span>
+<p class="text-sm font-medium truncate">PAYE Reforms</p>
+</div>
+</div>
+<div class="p-4 border-t border-white/10 flex flex-col gap-2">
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/5 text-white/70 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">help</span>
+<p class="text-sm font-medium">FAQs</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/5 text-white/70 hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">settings</span>
+<p class="text-sm font-medium">Settings</p>
+</div>
+<div class="flex items-center gap-3 mt-2 pt-4 border-t border-white/10">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAhcCfkOcXFCKZ1jMv5nZMYDOlZ56nUejrs3VSheNrPqdd5iSAprYfYhbvxY33Ed-bfc3hmay1a0wZzOosOy7NptCJhn6YSYvLS4Oyv2GCZExDSAikAOwXMC6sDqnXU7_LdIEidL5AOx6H_Qbjk0jnZdJoG1TIYZWFcZD3x3ThNA3Pz4iwvt-t06pyG7qNI_b45KZwf6xLCFsxnxHaHhK9OtKeyx8BYRBSLDHeqT6yTrX3sXxKpUNguLkw2LCV_Z8g9zV-cv8OLCY0s");'></div>
+<div class="flex flex-col">
+<p class="text-white text-sm font-medium">David Adewale</p>
+<p class="text-white/50 text-xs">Basic Plan</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full bg-white relative">
+<!-- Header -->
+<header class="flex items-center justify-between border-b border-[#f1f1f4] px-6 py-4 bg-white z-10 shrink-0">
+<div class="flex items-center gap-3 text-[#121217]">
+<button class="md:hidden flex items-center justify-center p-1 rounded hover:bg-gray-100">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="size-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<h2 class="text-[#121217] text-lg font-bold leading-tight tracking-[-0.015em]">Nigeria Tax Reform Assistant</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-gray-100 text-gray-500 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">notifications</span>
+</button>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-gray-100 text-gray-500 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 24px;">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Chat Area -->
+<div class="flex-1 overflow-y-auto p-6 md:p-10 flex flex-col gap-6" id="chat-container">
+<!-- Date Divider -->
+<div class="flex justify-center">
+<span class="text-xs font-medium text-gray-400 bg-gray-50 px-3 py-1 rounded-full">Today, 10:23 AM</span>
+</div>
+<!-- User Message 1 -->
+<div class="flex items-end gap-3 justify-end group">
+<div class="flex flex-col gap-1 items-end max-w-[80%] md:max-w-[70%]">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[#666685] text-xs">You</span>
+</div>
+<div class="rounded-2xl rounded-tr-sm px-5 py-3.5 bg-primary text-white shadow-sm">
+<p class="text-base font-normal leading-relaxed">
+                            What are the new VAT implications for small businesses under the reform?
+                        </p>
+</div>
+</div>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8 shrink-0 mb-1" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBGMok3TKixh_xNfz5H9g7jA_l8pn_diRYOP5YYu31ACLvdSYWTegE7IGNHq0odYWApJ-E_2JPY4obDoRBwjYBuW1KxM0XwGWwxs6VOu0Ql4v-qlrnxZbP9Bh5JGh-XnQRRH5tkz4LG0Dyydr3YmkQkJ7gDzamv0-gfxiTSzwZ5YUdhDnlduOGzczYxl_cleaK9HpFL8uouJYfdI1lxuzP-VKRasguCkTT6GqkELYNq_696INak2XkUmOargdCjsvIXhS4-uwURaO_0");'></div>
+</div>
+<!-- AI Message 1 -->
+<div class="flex items-start gap-3 justify-start group">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8 shrink-0 mt-1 border border-gray-100" data-alt="AI Assistant Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC5bkYpnMiu1SJhMAP4CRVrKTWSlNE8zpDrxTGethexnNKHDWObEiJY65VMqACXsQGBf-Wvwl-5ZafAIicx7q6Dw1XvTgBf5SPI-KVPp-gIKWCE7vCmD0KzlyIl_p4E6ISvyLUr9nY-uW0G33yucBlBypHtBYvYmvZQFg6RtieE1VNQ4i1zrbe-4uUCQcpWHTNLLRwoHi-NX1JmVyAUGWADiPuzzA2xuf2slGFr48aNuH63dDKKsAqrgUq7ed1UMhoO3KuJLtYHz6oP");'></div>
+<div class="flex flex-col gap-1 items-start max-w-[85%] md:max-w-[75%]">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[#666685] text-xs font-medium">Tax Assistant AI</span>
+</div>
+<div class="rounded-2xl rounded-tl-sm px-5 py-3.5 bg-[#f6f6f8] text-[#121217]">
+<p class="text-base font-normal leading-relaxed">
+                            Under the new reform, small businesses with an annual turnover of less than ₦25 million are exempt from charging VAT. However, for those above this threshold, the compliance process has been simplified to encourage voluntary declaration.
+                        </p>
+<div class="mt-3 flex gap-2">
+<button class="text-xs font-medium text-primary hover:text-primary/80 flex items-center gap-1 px-2 py-1 bg-white rounded border border-gray-200 shadow-sm transition-colors">
+<span class="material-symbols-outlined text-[16px]">description</span>
+                                View Policy Doc
+                             </button>
+<button class="text-xs font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1 px-2 py-1 bg-white rounded border border-gray-200 shadow-sm transition-colors">
+<span class="material-symbols-outlined text-[16px]">thumb_up</span>
+                                Helpful
+                             </button>
+</div>
+</div>
+</div>
+</div>
+<!-- User Message 2 -->
+<div class="flex items-end gap-3 justify-end group">
+<div class="flex flex-col gap-1 items-end max-w-[80%] md:max-w-[70%]">
+<div class="rounded-2xl rounded-tr-sm px-5 py-3.5 bg-primary text-white shadow-sm">
+<p class="text-base font-normal leading-relaxed">
+                           Can you generate a summary of the exemptions for educational materials specifically?
+                        </p>
+</div>
+<span class="text-[#666685] text-[11px] mt-1 mr-1">Sent 10:25 AM</span>
+</div>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8 shrink-0 mb-6" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC2jjkNA8YWiQHaK4pGTQMM2wClPjSDqgDZLZC8AU1OWTZf5K4IPLMYYBhxL3dztKMTBRMMqwS1LyvxRzc3CrFcjHFy3B0LsUJJc8cSat7VIE4ERzXCzc-j1ZH0VQTs2X9BOK2C4UAA2pJIYfEuTyIkl0gCkU11bkF4S0_lwBDvDRjCsIddGUYy4dm-0efPhZBM0CwHGCQpCakpCIhY24Kzw4a3heP5HNNdKf6bODLfkSbwp6XkWNr_Cx5JCMz1hr9Q8kzfIClzjLSC");'></div>
+</div>
+<!-- ERROR STATE COMPONENT -->
+<!-- Distinctive styling as requested: Subtle red tint, professional, clean -->
+<div class="flex items-start gap-3 justify-start animate-fade-in w-full max-w-[85%] md:max-w-[600px]">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-8 shrink-0 mt-1 border border-gray-100" data-alt="AI Assistant Logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBHMeXeO6C1pw521SOoM6aKWPH7X_vh5q31_PopLOyil59M9-AKs2KL5PStq-AgQ5TEpcFCAXqdlU7K1_FUSxP0U36z-VTvFTw8JK8m_rt9-yyDWBq949mDYHmkyRGRyyKUPScJc1bWFKgfEgC7c52-hAPeoqvnyzEGBikN82DPfofA9eAtEkY0hlPJ_92Eo3o5d_tyn4MvaxNj9yva41J8SDGvKIwuEVv0G0s5G3EFouuZJgg73wX5Bb6p_fC0jrHljtzVKZ-AFe9e");'></div>
+<div class="flex flex-col gap-1 items-start w-full">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[#666685] text-xs font-medium">Tax Assistant AI</span>
+<span class="text-red-500 text-[10px] bg-red-50 px-1.5 py-0.5 rounded font-medium border border-red-100 uppercase tracking-wide">Error</span>
+</div>
+<div class="w-full rounded-lg border border-red-200 bg-[#FFF9F9] p-4 flex gap-4 shadow-sm relative overflow-hidden group/error">
+<!-- Decorative side accent -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-red-400"></div>
+<div class="flex flex-col gap-2 w-full">
+<div class="flex gap-3 items-start">
+<!-- Warning Icon in Gold/Orange as requested for accent within error -->
+<div class="bg-white p-1.5 rounded-full shadow-sm border border-red-100 shrink-0">
+<span class="material-symbols-outlined text-orange-500/90" style="font-size: 20px;">warning</span>
+</div>
+<div>
+<p class="text-[#121217] text-sm font-semibold leading-tight">Response Interrupted</p>
+<p class="text-[#666685] text-sm font-normal leading-normal mt-1">
+                                        We encountered a network issue while retrieving the latest tax exemption data. Please check your connection and try again.
+                                    </p>
+</div>
+</div>
+<div class="flex justify-end mt-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 hover:border-primary/30 rounded-md text-sm font-medium text-primary transition-all shadow-sm group active:scale-95">
+<span class="material-symbols-outlined text-primary group-hover:rotate-180 transition-transform duration-500" style="font-size: 18px;">refresh</span>
+                                    Try Again
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Spacer for scrolling -->
+<div class="h-4"></div>
+</div>
+<!-- Input Area Footer -->
+<div class="p-6 border-t border-[#f1f1f4] bg-white w-full shrink-0">
+<div class="relative max-w-[960px] mx-auto">
+<div class="relative flex items-center">
+<textarea class="w-full pl-4 pr-14 py-3.5 bg-background-light border-0 rounded-xl focus:ring-2 focus:ring-primary/20 text-[#121217] placeholder:text-gray-400 resize-none overflow-hidden min-h-[52px]" placeholder="Ask a follow-up question..." rows="1"></textarea>
+<div class="absolute right-2 flex items-center gap-1">
+<button class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-200/50 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">mic</span>
+</button>
+<button class="p-2 bg-primary hover:bg-primary/90 text-white rounded-lg shadow-sm transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">send</span>
+</button>
+</div>
+</div>
+<p class="text-center text-xs text-gray-400 mt-3">
+                    AI responses may vary. Check official FIRS documentation for critical tax filing.
+                </p>
+</div>
+</div>
+</main>
+</body></html>

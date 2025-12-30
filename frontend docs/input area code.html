@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nigeria Tax Reform Q&amp;A - Input Area</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e1e8a",
+                        "primary-hover": "#161668",
+                        "accent": "#f59e0b",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121220",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e1e2e",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem", 
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'input': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05)',
+                        'input-focus': '0 4px 25px -2px rgba(30, 30, 138, 0.15)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for textarea but keep functionality */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #e2e8f0;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-hidden h-screen flex flex-col">
+<!-- Background Decoration -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-40" data-alt="Subtle radial gradient at the top for depth" style="background-image: radial-gradient(circle at 50% 0%, #1e1e8a08 0%, transparent 40%);"></div>
+<!-- Main Content Area (Context) -->
+<div class="flex-1 w-full max-w-[960px] mx-auto px-4 sm:px-6 relative z-10 flex flex-col">
+<!-- Header / Nav placeholder -->
+<header class="h-16 flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800/60 mb-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-[20px]">account_balance</span>
+</div>
+<h1 class="font-semibold text-slate-800 dark:text-slate-100 tracking-tight">Nigeria Tax Reform Assistant</h1>
+</div>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Chat History Area (Scrollable) -->
+<div class="flex-1 overflow-y-auto space-y-8 pr-2 pb-10">
+<!-- AI Welcome Message -->
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[22px]">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-2xl">
+<div class="bg-white dark:bg-surface-dark p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-slate-700">
+<p class="text-[15px] leading-7 text-slate-700 dark:text-slate-300">
+                            Hello! I am your assistant for the Nigeria Finance Act and recent tax reforms. 
+                            You can ask me about Company Income Tax (CIT), VAT modifications, or Personal Income Tax adjustments.
+                        </p>
+</div>
+<span class="text-xs text-slate-400 pl-1">10:24 AM</span>
+</div>
+</div>
+<!-- User Previous Message (Example) -->
+<div class="flex gap-4 flex-row-reverse">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[22px]">person</span>
+</div>
+<div class="flex flex-col gap-1 max-w-2xl items-end">
+<div class="bg-primary text-white p-5 rounded-2xl rounded-tr-none shadow-md">
+<p class="text-[15px] leading-7">
+                            Can you summarize the changes to the Tertiary Education Tax rate?
+                        </p>
+</div>
+<span class="text-xs text-slate-400 pr-1">10:25 AM</span>
+</div>
+</div>
+<!-- AI Response (Example) -->
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[22px]">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-2xl">
+<div class="bg-white dark:bg-surface-dark p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-slate-700">
+<p class="text-[15px] leading-7 text-slate-700 dark:text-slate-300">
+                            The Tertiary Education Tax (TET) rate was increased from 2.5% to 3% of assessable profits for Nigerian companies. This change is part of the ongoing efforts to improve funding for public tertiary institutions.
+                        </p>
+</div>
+<span class="text-xs text-slate-400 pl-1">10:25 AM</span>
+</div>
+</div>
+</div>
+</div>
+<!-- INPUT AREA CONTAINER (Sticky Footer) -->
+<div class="w-full bg-white/80 dark:bg-background-dark/80 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 z-50">
+<div class="max-w-[960px] mx-auto px-4 sm:px-6 py-6">
+<div class="flex flex-col w-full">
+<!-- Input Card Wrapper -->
+<div class="group relative w-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl shadow-input transition-all duration-300 focus-within:shadow-input-focus focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+<!-- Text Area -->
+<label class="sr-only" for="chat-input">Ask a question about Nigerian Tax Reforms</label>
+<textarea class="w-full bg-transparent border-0 focus:ring-0 resize-none rounded-t-xl p-4 text-base text-slate-800 dark:text-slate-100 placeholder-slate-400 min-h-[80px] max-h-[200px]" id="chat-input" placeholder="Type your question about the Finance Act here..." rows="3"></textarea>
+<!-- Bottom Toolbar -->
+<div class="flex items-center justify-between px-3 pb-3 pt-1">
+<!-- Left: Utility Icons -->
+<div class="flex items-center gap-1">
+<button aria-label="Attach File" class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors tooltip-trigger">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+<button aria-label="Formatting" class="p-2 rounded-lg text-slate-400 hover:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors hidden sm:inline-flex">
+<span class="material-symbols-outlined text-[20px]">format_size</span>
+</button>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-4">
+<!-- Character Counter -->
+<span class="text-xs font-medium text-slate-300 dark:text-slate-600 hidden sm:inline-block">
+                                0 / 2000
+                            </span>
+<!-- Send Button -->
+<button class="relative flex items-center justify-center h-10 px-6 rounded-lg bg-primary text-white font-medium text-sm transition-all duration-200 hover:bg-accent hover:shadow-lg hover:shadow-accent/20 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed group/btn overflow-hidden">
+<!-- Ready State Content -->
+<div class="flex items-center gap-2 group-disabled/btn:opacity-0 transition-opacity">
+<span>Send</span>
+<span class="material-symbols-outlined text-[18px]">send</span>
+</div>
+<!-- Loading State Content (Hidden by default, shown when disabled) -->
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-disabled/btn:opacity-100 transition-opacity">
+<svg class="animate-spin h-5 w-5 text-white" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+</div>
+</button>
+</div>
+</div>
+<!-- Example of Disabled/Processing State (Overlay) -->
+<!-- Un-comment this div to see the disabled processing state visual -->
+<!-- 
+                    <div class="absolute inset-0 bg-white/60 dark:bg-black/40 z-10 flex items-center justify-center backdrop-blur-[1px] rounded-xl cursor-wait">
+                    </div> 
+                    -->
+</div>
+<!-- Footer Disclaimer -->
+<p class="text-center text-xs text-slate-400 dark:text-slate-500 mt-3 font-medium">
+                    AI-generated responses. Please consult a professional for critical tax advice.
+                </p>
+</div>
+</div>
+</div>
+</body></html>

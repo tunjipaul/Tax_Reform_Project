@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nigeria Tax Reform Assistant - Loading State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1e1e8a",
+                        "accent": "#d4af37", // Gold accent
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#121220",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e1e2d",
+                        "text-primary": "#121217",
+                        "text-secondary": "#666685",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "sans": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Loading Animation */
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-primary h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-surface-light dark:bg-surface-dark border-r border-gray-200 dark:border-gray-800 flex-col hidden lg:flex h-full shadow-sm z-10">
+<div class="p-6 border-b border-gray-100 dark:border-gray-800">
+<h1 class="text-primary dark:text-white text-xl font-bold leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-accent" style="font-size: 28px;">account_balance</span>
+                Tax Assistant
+            </h1>
+<p class="text-text-secondary text-xs font-medium uppercase tracking-wider mt-1 ml-9">Nigeria Reform Guide</p>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<button class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary dark:text-blue-200 hover:bg-primary/20 transition-colors w-full group">
+<span class="material-symbols-outlined text-primary dark:text-blue-200 group-hover:scale-110 transition-transform">add_circle</span>
+<span class="text-sm font-semibold">New Chat</span>
+</button>
+</div>
+<div class="flex flex-col gap-1">
+<div class="text-xs font-semibold text-text-secondary uppercase px-4 mb-2">Library</div>
+<button class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-text-secondary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full group">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">bookmark</span>
+<span class="text-sm font-medium">Saved Queries</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-text-secondary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full group">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">menu_book</span>
+<span class="text-sm font-medium">Tax Laws</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-text-secondary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full group">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">history</span>
+<span class="text-sm font-medium">History</span>
+</button>
+</div>
+<div class="mt-auto">
+<button class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-text-secondary hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full group">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</button>
+<div class="mt-4 p-4 rounded-xl bg-gradient-to-br from-primary to-[#0f0f4a] text-white relative overflow-hidden">
+<div class="relative z-10">
+<p class="font-bold text-sm mb-1">Upgrade to Pro</p>
+<p class="text-xs text-blue-200 mb-3">Get advanced analysis and unlimited queries.</p>
+<button class="w-full py-2 bg-white text-primary text-xs font-bold rounded-lg hover:bg-gray-50 transition-colors">Subscribe</button>
+</div>
+<div class="absolute -bottom-4 -right-4 w-24 h-24 bg-accent/20 rounded-full blur-xl"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-full bg-background-light dark:bg-background-dark relative">
+<!-- Header -->
+<header class="bg-surface-light dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800 h-16 flex items-center justify-between px-6 lg:px-10 shrink-0 z-10">
+<div class="flex items-center gap-3 lg:hidden">
+<button class="text-text-secondary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-bold text-primary dark:text-white">Tax Assistant</span>
+</div>
+<div class="hidden lg:flex flex-col">
+<h2 class="text-text-primary dark:text-white text-lg font-bold leading-tight">Nigeria Tax Reform Q&amp;A</h2>
+<span class="text-xs text-text-secondary">Finance Act 2024 Reference</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary text-lg">search</span>
+<input class="pl-10 pr-4 py-2 rounded-lg bg-background-light dark:bg-gray-800 border-none text-sm w-64 focus:ring-1 focus:ring-primary text-text-primary" placeholder="Search conversations..." type="text"/>
+</div>
+<button class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-text-secondary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></span>
+</button>
+<div class="w-9 h-9 rounded-full bg-cover bg-center ring-2 ring-gray-100 dark:ring-gray-700" data-alt="User profile portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCBuWSMPadA8M094yZWL145xI_IWhr2m6EuhS1qlZa64mzr_3EJZ4OBZ6utxFRjlHYLJKv9XW3RdG35fdJSLv08sTJsAhkqzFiu8p_63CXgiE_FpQiTVz9lfbKBy3cVGfRJi1nyg3c8JqJfmo-4HH7JAsnawpmFUv5YUGSL3Ay0lz18Q23ttMW73_IgVhQ8mjhUqrP7mEcF0YgRVmtOk_wjiNJv62fSRTs1CyVrE0wAyTMD1EBb6r0hTiWDR_zRnwOvo16uGJHJ6lka');"></div>
+</div>
+</header>
+<!-- Chat Area -->
+<div class="flex-1 overflow-y-auto p-4 lg:p-10 scroll-smooth" id="chat-container">
+<div class="max-w-4xl mx-auto flex flex-col gap-8 pb-4">
+<!-- Date Separator -->
+<div class="flex justify-center">
+<span class="text-xs font-medium text-text-secondary bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-full">Today, 10:23 AM</span>
+</div>
+<!-- Intro System Message -->
+<div class="flex flex-col items-center justify-center py-10 text-center gap-4 opacity-60">
+<div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl">smart_toy</span>
+</div>
+<div>
+<h3 class="font-bold text-text-primary dark:text-white">Ask me anything about Nigeria's new tax laws</h3>
+<p class="text-sm text-text-secondary mt-1">I can help with VAT compliance, CIT rates, and exemption lists.</p>
+</div>
+</div>
+<!-- Assistant Message (Previous) -->
+<div class="flex gap-4 group">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-md">
+<span class="material-symbols-outlined text-white text-xl">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 max-w-[85%] lg:max-w-[75%]">
+<div class="flex items-baseline justify-between gap-4">
+<span class="text-xs font-bold text-text-primary dark:text-white">Tax Assistant</span>
+<span class="text-xs text-text-secondary">10:24 AM</span>
+</div>
+<div class="bg-white dark:bg-surface-dark border border-gray-100 dark:border-gray-700 p-4 rounded-2xl rounded-tl-none shadow-sm text-text-primary dark:text-gray-200 text-sm leading-relaxed">
+<p>Hello! I am your guide to the recent Nigeria Tax Reforms. How can I assist you with compliance or understanding the new Finance Act today?</p>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 flex-row-reverse group">
+<div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center shrink-0 overflow-hidden ring-2 ring-white dark:ring-gray-800">
+<div class="w-full h-full bg-cover bg-center" data-alt="User profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDurB_6RHVWvRucIEXjv4KGX__kQ0zjmx6sw_8N2DzYo4mnEGDY7Ra6E_yUrXDdXRhCgrAYrKnC0utrHdbVvCEWv9F9OWopV8B3EhgKpR9tiElAvU5ZNVzyolTcbeBfxEOOKEfvnPdPD2JnkhePg3_AsCqUeYRSaqTKxIK0jSeQiTB3ExaBOb1b3J_WycwWtJmZ5mbj0mEdtNB_doiJgq3Cic72DCUVO9IxnyGhsdJlVfZmBWa1Gj6-hCJAtyLGoGufG1ZEdhNoNNU1');"></div>
+</div>
+<div class="flex flex-col gap-1 items-end max-w-[85%] lg:max-w-[75%]">
+<div class="flex items-baseline gap-4">
+<span class="text-xs text-text-secondary">10:25 AM</span>
+<span class="text-xs font-bold text-text-primary dark:text-white">You</span>
+</div>
+<div class="bg-primary text-white p-4 rounded-2xl rounded-tr-none shadow-md text-sm leading-relaxed">
+<p>What are the new VAT compliance requirements for small businesses under the reform? Specifically regarding the threshold for registration.</p>
+</div>
+</div>
+</div>
+<!-- Loading State (Thinking) -->
+<div aria-busy="true" aria-live="polite" class="flex gap-4 group animate-pulse-slow">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-surface-dark border-2 border-primary/20 flex items-center justify-center shrink-0 shadow-sm relative">
+<!-- Tiny spinner overlay on avatar -->
+<div class="absolute inset-0 rounded-full border-2 border-primary/30 border-t-primary animate-spin"></div>
+<span class="material-symbols-outlined text-primary text-xl">smart_toy</span>
+</div>
+<div class="flex flex-col gap-1 w-full max-w-[85%] lg:max-w-[75%]">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-text-primary dark:text-white">Tax Assistant</span>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+</span>
+<span class="text-xs font-medium text-accent">Thinking...</span>
+</div>
+<!-- Skeleton Loader Bubble -->
+<div class="bg-white dark:bg-surface-dark border-l-4 border-l-accent border-y border-r border-gray-100 dark:border-gray-700 p-5 rounded-r-2xl rounded-bl-2xl shadow-sm w-full">
+<div class="flex items-center gap-3 mb-4">
+<div class="flex gap-1">
+<div class="w-2 h-2 bg-primary/60 rounded-full typing-dot"></div>
+<div class="w-2 h-2 bg-primary/60 rounded-full typing-dot"></div>
+<div class="w-2 h-2 bg-primary/60 rounded-full typing-dot"></div>
+</div>
+<span class="text-xs text-text-secondary font-medium animate-pulse">Analyzing Finance Act 2024 Database...</span>
+</div>
+<!-- Skeleton Text Lines -->
+<div class="space-y-3">
+<div class="h-3 bg-gray-100 dark:bg-gray-800 rounded w-3/4 shimmer"></div>
+<div class="h-3 bg-gray-100 dark:bg-gray-800 rounded w-full shimmer"></div>
+<div class="h-3 bg-gray-100 dark:bg-gray-800 rounded w-5/6 shimmer"></div>
+<div class="flex gap-3 mt-4">
+<div class="h-8 w-24 bg-gray-100 dark:bg-gray-800 rounded-lg shimmer"></div>
+<div class="h-8 w-24 bg-gray-100 dark:bg-gray-800 rounded-lg shimmer"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 lg:px-10 lg:pb-8 bg-background-light dark:bg-background-dark/95 backdrop-blur-sm z-20">
+<div class="max-w-4xl mx-auto">
+<div class="relative flex items-end gap-2 bg-white dark:bg-surface-dark p-2 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 ring-1 ring-black/5 opacity-80 cursor-not-allowed">
+<button class="p-2 text-text-secondary hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+<div class="flex-1 py-2 max-h-32 overflow-y-auto">
+<textarea class="w-full bg-transparent border-none p-0 text-text-primary dark:text-white placeholder:text-gray-400 focus:ring-0 resize-none text-sm leading-6" disabled="" placeholder="Assistant is processing..." rows="1"></textarea>
+</div>
+<div class="flex items-center gap-1 pb-1">
+<button class="p-2 text-text-secondary hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]">mic</span>
+</button>
+<button class="p-2 bg-primary text-white rounded-lg shadow-sm hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[40px]" disabled="">
+<span class="material-symbols-outlined text-[20px] animate-spin">sync</span>
+</button>
+</div>
+</div>
+<div class="text-center mt-3">
+<p class="text-[11px] text-text-secondary">
+                        AI generated responses regarding Nigerian Tax Law should be verified with a professional.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+</body></html>
