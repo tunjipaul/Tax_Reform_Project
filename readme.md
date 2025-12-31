@@ -146,3 +146,8 @@ Questions or issues — open an issue or contact the project lead: **(add name /
 ---
 
 Good luck — let's build a trustworthy, source-backed assistant that helps millions understand the Tax Reform Bills! 🇳🇬
+
+
+
+cd /Users/mac/Desktop/Tax_Reform_Project/backend
+uvicorn app.main:app --reload
