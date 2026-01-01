@@ -5,3 +5,4 @@ ai_engine.log
 __pycache__/
 chroma_db/
 OLD/
+node_modules
