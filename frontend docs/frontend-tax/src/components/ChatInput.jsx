@@ -1,16 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Send, ArrowUp, Paperclip, Type, Mic, Plus } from 'lucide-react';
+import { fetchPlaceholder } from '../services/api';
+import { DEFAULT_PLACEHOLDER } from '../constants';
 
 const ChatInput = ({ 
   onSend, 
-  placeholder = "Ask a question about the 2024 Tax Reform...",
+  placeholder,
   disabled = false,
   variant = 'default',
   isDarkMode = false
 }) => {
   const [message, setMessage] = useState('');
   const [charCount, setCharCount] = useState(0);
+  const [dynamicPlaceholder, setDynamicPlaceholder] = useState(placeholder || DEFAULT_PLACEHOLDER);
   const maxChars = 2000;
+
+  // Fetch placeholder from backend on mount
+  useEffect(() => {
+    const loadPlaceholder = async () => {
+      if (!placeholder) {
+        const backendPlaceholder = await fetchPlaceholder();
+        setDynamicPlaceholder(backendPlaceholder);
+      }
+    };
+
+    loadPlaceholder();
+  }, [placeholder]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,10 +76,10 @@ const ChatInput = ({
               value={message}
               onChange={handleChange}
               onKeyDown={handleKeyDown}
-              placeholder={placeholder}
+              placeholder={dynamicPlaceholder}
               disabled={disabled}
               rows={1}
-              className={`w-full px-6 py-4 bg-transparent focus:outline-none resize-none ${
+              className={`w-full px-6 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none resize-none ${
                 variant === 'with-attachments' ? 'pl-14' : ''
               } ${
                 isDarkMode 
@@ -144,7 +159,7 @@ const ChatInput = ({
           </div>
         </form>
 
-      
+        {/* Disclaimer */}
         {variant !== 'simple' && (
           <p className={`text-xs text-center mt-3 ${
             isDarkMode ? 'text-gray-500' : 'text-gray-500'
