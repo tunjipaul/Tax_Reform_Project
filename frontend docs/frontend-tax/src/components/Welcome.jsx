@@ -27,16 +27,6 @@ const Welcome = ({ onCardClick, isDarkMode = false }) => {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-      
-      {/* <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-8 ${
-        isDarkMode ? 'bg-green-900/30' : 'bg-green-100'
-      }`}>
-        <div className="relative">
-          <DollarSign className="w-10 h-10 text-green-600" />
-          <div className="absolute -top-1 -right-1 w-4 h-0.5 bg-green-600 rotate-45"></div>
-        </div>
-      </div> */}
-
       <h2 className={`text-4xl font-bold mb-4 ${
         isDarkMode ? 'text-white' : 'text-gray-900'
       }`}>
@@ -48,7 +38,6 @@ const Welcome = ({ onCardClick, isDarkMode = false }) => {
         Your intelligent assistant for understanding the 2024 tax reform bills. Ask about
         exemptions, new levies, VAT changes, or personal income tax implications.
       </p>
-
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl w-full">
         {cards.map((card, index) => (

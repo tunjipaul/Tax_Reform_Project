@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
 
-/**
- * Custom hook for managing dark mode state
- * Handles localStorage persistence and DOM class manipulation
- * @returns {[boolean, function]} [isDarkMode, toggleDarkMode]
- */
+const STORAGE_KEY = 'darkMode';
+
 export const useDarkMode = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Initialize from localStorage with validation
     try {
-      const saved = localStorage.getItem('darkMode');
+      const saved = localStorage.getItem(STORAGE_KEY);
       return saved === 'true';
     } catch (error) {
       console.error('Error reading dark mode preference:', error);
@@ -17,7 +13,6 @@ export const useDarkMode = () => {
     }
   });
 
-  // Apply dark mode class when state changes
   useEffect(() => {
     const html = document.documentElement;
     
@@ -29,9 +24,8 @@ export const useDarkMode = () => {
       html.style.colorScheme = 'light';
     }
 
-    // Save to localStorage
     try {
-      localStorage.setItem('darkMode', isDarkMode.toString());
+      localStorage.setItem(STORAGE_KEY, isDarkMode.toString());
     } catch (error) {
       console.error('Error saving dark mode preference:', error);
     }

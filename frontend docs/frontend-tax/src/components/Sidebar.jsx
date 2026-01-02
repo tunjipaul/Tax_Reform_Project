@@ -31,9 +31,7 @@ const Sidebar = ({
   const menuItems = [
     { icon: <History className="w-5 h-5" />, label: 'History', action: 'history' },
     { icon: <Bookmark className="w-5 h-5" />, label: 'Saved Queries', action: 'saved' },
-    { icon: <BookOpen className="w-5 h-5" />, label: 'Tax Laws', action: 'laws' },
     { icon: <Settings className="w-5 h-5" />, label: 'Settings', action: 'settings' },
-    { icon: <HelpCircle className="w-5 h-5" />, label: 'FAQs', action: 'faqs' }
   ];
 
   const handleNewChatClick = () => {

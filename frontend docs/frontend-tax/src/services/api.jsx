@@ -1,22 +1,16 @@
 import { API_CONFIG, API_ENDPOINTS, ERROR_MESSAGES, DEFAULT_PLACEHOLDER } from '../constants';
 
-/**
- * Fetch with timeout support
- * @param {string} url 
- * @param {object} options 
- * @returns {Promise}
- */
 const fetchWithTimeout = async (url, options = {}) => {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
+  const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
 
   try {
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal,
+      signal: options.signal || controller.signal,
     });
 
-    clearTimeout(timeout);
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -24,7 +18,7 @@ const fetchWithTimeout = async (url, options = {}) => {
 
     return await response.json();
   } catch (error) {
-    clearTimeout(timeout);
+    clearTimeout(timeoutId);
     
     if (error.name === 'AbortError') {
       throw new Error(ERROR_MESSAGES.TIMEOUT_ERROR);
@@ -34,12 +28,7 @@ const fetchWithTimeout = async (url, options = {}) => {
   }
 };
 
-/**
- * Send chat message to backend
- * @param {string} message 
- * @returns {Promise}
- */
-export const sendChatMessage = async (message) => {
+export const sendChatMessage = async (message, signal = null) => {
   try {
     const response = await fetchWithTimeout(API_ENDPOINTS.CHAT, {
       method: 'POST',
@@ -50,6 +39,7 @@ export const sendChatMessage = async (message) => {
         message,
         timestamp: new Date().toISOString(),
       }),
+      signal,
     });
 
     return {
@@ -64,10 +54,6 @@ export const sendChatMessage = async (message) => {
   }
 };
 
-/**
- * Fetch placeholder text from backend
- * @returns {Promise<string>}
- */
 export const fetchPlaceholder = async () => {
   try {
     const response = await fetchWithTimeout(API_ENDPOINTS.PLACEHOLDER, {
@@ -84,11 +70,6 @@ export const fetchPlaceholder = async () => {
   }
 };
 
-/**
- * Fetch sources/citations
- * @param {string} messageId 
- * @returns {Promise}
- */
 export const fetchSources = async (messageId) => {
   try {
     const response = await fetchWithTimeout(
@@ -113,11 +94,6 @@ export const fetchSources = async (messageId) => {
   }
 };
 
-/**
- * Fetch chat history
- * @param {string} userId 
- * @returns {Promise}
- */
 export const fetchChatHistory = async (userId) => {
   try {
     const response = await fetchWithTimeout(
