@@ -1,3 +1,117 @@
+# # backend/app/api/chat.py
+
+# import asyncio
+# import datetime
+# from fastapi import APIRouter, HTTPException, Depends
+# from sqlalchemy.orm import Session
+# from fastapi.responses import JSONResponse
+# from app.schemas.chat import ChatRequest, ChatResponse
+# from app.db.models import Message
+# from app.db.database import SessionLocal
+# from app.services.ai_engine import get_ai_agent
+
+# router = APIRouter(prefix="/api/chat", tags=["Chat"])
+
+# # -------------------------------
+# # Dependency to get DB session
+# # -------------------------------
+# def get_db():
+#     db = SessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
+
+
+# # -------------------------------
+# # Chat endpoint with timeout & async
+# # -------------------------------
+# @router.post("/", response_model=ChatResponse)
+# async def chat_endpoint(request: ChatRequest, db: Session = Depends(get_db)):
+#     """
+#     Handles chat requests:
+#     1. Calls the AI agent asynchronously
+#     2. Persists user and AI messages
+#     3. Enforces a timeout to prevent blocking
+#     """
+#     try:
+#         # Get AI agent (may raise RuntimeError if not initialized)
+#         agent = get_ai_agent()
+
+#         # -------------------------------
+#         # Run AI operation with timeout
+#         # -------------------------------
+#         TIMEOUT_SECONDS = 15  # adjust based on expected response times
+
+#         try:
+#             response_dict = await asyncio.wait_for(
+#                 asyncio.to_thread(
+#                     agent.chat,
+#                     message=request.message,
+#                     session_id=request.session_id,
+#                     conversation_history=request.conversation_history
+#                 ),
+#                 timeout=TIMEOUT_SECONDS
+#             )
+#         except asyncio.TimeoutError:
+#             # Timeout: return friendly error to client
+#             response_dict = {
+#                 "session_id": request.session_id,
+#                 "response": "Sorry, the AI took too long to respond. Please try again.",
+#                 "sources": [],
+#                 "retrieved": False,
+#                 "timestamp": datetime.datetime.utcnow().isoformat()
+#             }
+
+#         # Ensure response_dict has required keys
+#         response_text = str(response_dict.get("response", ""))
+#         if not response_text:
+#             response_text = "Sorry, I could not generate a response."
+
+#         # -------------------------------
+#         # Persist user message
+#         # -------------------------------
+#         user_msg = Message(
+#             session_id=request.session_id,
+#             role="user",
+#             content=request.message,
+#             extra_data={}  # user messages don't have extra data
+#         )
+#         db.add(user_msg)
+
+#         # -------------------------------
+#         # Persist AI message
+#         # -------------------------------
+#         ai_msg = Message(
+#             session_id=request.session_id,
+#             role="assistant",
+#             content=response_text,
+#             extra_data=response_dict  # store full AI response for debugging
+#         )
+#         db.add(ai_msg)
+
+#         # Commit all messages
+#         db.commit()
+#         db.refresh(user_msg)
+#         db.refresh(ai_msg)
+
+#         # -------------------------------
+#         # Return sanitized response to frontend
+#         # -------------------------------
+#         return ChatResponse(**response_dict)
+
+#     except RuntimeError as re:
+#         # AI not initialized yet
+#         return JSONResponse(
+#             status_code=503,
+#             content={
+#                 "detail": "AI engine is still starting. Please try again shortly."
+#             }
+#         )
+#     except Exception as e:
+#         # Catch-all (won't expose internal error thanks to middleware)
+#         print(f"[ERROR] Unexpected error in chat_endpoint: {e}")
+#         raise HTTPException(status_code=500, detail="Internal server error.")
 
 
 
@@ -7,32 +121,24 @@
 
 
 
-
-
-
-
-
-
-# backend/app/api/chat.py
-
-import asyncio
-import datetime
-import traceback
-from typing import Optional, List, Dict
-
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.db.models import Message
 from app.db.database import SessionLocal
 from app.services.ai_engine import get_ai_agent
 
-router = APIRouter(prefix="/api/chat")
+import asyncio
 
+router = APIRouter()
+
+limiter = Limiter(key_func=get_remote_address)
 
 # -------------------------------
-# Dependency to get DB session
+# DB Dependency
 # -------------------------------
 def get_db():
     db = SessionLocal()
@@ -41,92 +147,58 @@ def get_db():
     finally:
         db.close()
 
+# -------------------------------
+# Chat Endpoint (RATE LIMITED)
+# -------------------------------
+@router.post(
+    "/",
+    response_model=ChatResponse,
+)
+@limiter.limit("5/minute")  # ✅ FIX FOR ISSUE #9
+async def chat_endpoint(
+    request: Request,
+    payload: ChatRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Handles chat requests with rate limiting
+    """
 
-# -------------------------------
-# Chat endpoint
-# -------------------------------
-@router.post("/", response_model=ChatResponse)
-async def chat_endpoint(request: ChatRequest, db: Session = Depends(get_db)):
-    """
-    Handles chat requests:
-    1. Calls the AI agent asynchronously
-    2. Persists user and AI messages in MySQL
-    3. Returns a fully validated ChatResponse
-    """
+    agent = get_ai_agent()
+
     try:
-        agent = get_ai_agent()
-
-        # -------------------------------
-        # Call agent asynchronously
-        # -------------------------------
-        try:
-            # If agent.chat is synchronous, run in thread to avoid blocking event loop
-            ai_result = await asyncio.to_thread(
+        response_dict = await asyncio.wait_for(
+            asyncio.to_thread(
                 agent.chat,
-                message=request.message,
-                session_id=request.session_id,
-                conversation_history=request.conversation_history or []
-            )
-        except Exception as e:
-            # Fallback in case agent fails
-            print(f"[WARN] AI agent call failed: {e}")
-            ai_result = {"response": "Sorry, I could not generate a response."}
-
-        # -------------------------------
-        # Normalize AI response
-        # -------------------------------
-        if isinstance(ai_result, dict):
-            response_text = str(ai_result.get("response", "Sorry, I could not generate a response."))
-            sources = ai_result.get("sources", [])
-            retrieved = ai_result.get("retrieved", False)
-        else:
-            # If AI returned raw string
-            response_text = str(ai_result)
-            sources = []
-            retrieved = False
-
-        # Ensure all fields required by ChatResponse exist
-        response_dict = {
-            "session_id": request.session_id,
-            "response": response_text,
-            "sources": sources,
-            "retrieved": retrieved,
-            "timestamp": datetime.datetime.utcnow().isoformat()
-        }
-
-        # -------------------------------
-        # Persist user message
-        # -------------------------------
-        user_msg = Message(
-            session_id=request.session_id,
-            role="user",
-            content=request.message,
-            extra_data={}  # No extra data for user messages
+                message=payload.message,
+                session_id=payload.session_id,
+                conversation_history=payload.conversation_history
+            ),
+            timeout=30  # (Issue #7 protection)
         )
-        db.add(user_msg)
 
-        # -------------------------------
-        # Persist AI message
-        # -------------------------------
-        ai_msg = Message(
-            session_id=request.session_id,
+        response_text = response_dict.get("response", "")
+
+        db.add(Message(
+            session_id=payload.session_id,
+            role="user",
+            content=payload.message,
+            extra_data={}
+        ))
+
+        db.add(Message(
+            session_id=payload.session_id,
             role="assistant",
             content=response_text,
-            extra_data=ai_result  # Full AI response
-        )
-        db.add(ai_msg)
+            extra_data=response_dict
+        ))
 
-        # Commit all messages atomically
         db.commit()
-        db.refresh(user_msg)
-        db.refresh(ai_msg)
 
-        # -------------------------------
-        # Return response to frontend
-        # -------------------------------
         return ChatResponse(**response_dict)
 
-    except Exception as e:
-        print(f"[ERROR] Unexpected error in chat_endpoint: {e}")
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Internal server error.")
+    except asyncio.TimeoutError:
+        raise HTTPException(
+            status_code=504,
+            detail="AI response timed out. Please try again."
+        )
