@@ -1,3 +1,5 @@
+import React from 'react';
+import { Sparkles, FileText, TrendingUp, ShoppingBag } from 'lucide-react';
 
 const SuggestedActions = ({ suggestions, onSelect, isDarkMode = false }) => {
   const defaultSuggestions = [

@@ -1,3 +1,4 @@
+import React from 'react';
 import Welcome from '../Welcome';
 import ChatInput from '../ChatInput';
 import SuggestedActions from '../SuggestedActions';

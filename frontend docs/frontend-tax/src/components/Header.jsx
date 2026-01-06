@@ -1,3 +1,4 @@
+import React from 'react';
 import { Building2, Moon, Sun, Plus, User, Menu } from 'lucide-react';
 
 const Header = ({ 

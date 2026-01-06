@@ -1,3 +1,4 @@
+import React from 'react';
 import { DollarSign, BookOpen, Building, TrendingUp } from 'lucide-react';
 
 const Welcome = ({ onCardClick, isDarkMode = false }) => {

@@ -1,3 +1,4 @@
+import React from 'react';
 import Header from './Header';
 import WelcomeView from './views/WelcomeView';
 import ChatView from './views/ChatView';
