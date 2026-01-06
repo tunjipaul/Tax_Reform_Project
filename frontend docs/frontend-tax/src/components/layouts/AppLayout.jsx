@@ -1,4 +1,3 @@
-import React from 'react';
 import Sidebar from '../Sidebar';
 import { useChatContext } from '../../contexts/ChatContext';
 import { MOCK_RECENT_CHATS, MOCK_USER } from '../../constants';

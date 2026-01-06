@@ -1,4 +1,3 @@
-import React from 'react';
 import ChatDisplay from '../ChatDisplay';
 import ChatInput from '../ChatInput';
 import LoadingIndicator from '../LoadingIndicator';

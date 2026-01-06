@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Send, ArrowUp, Paperclip, Type, Mic, Plus } from 'lucide-react';
 import { fetchPlaceholder } from '../services/api';
 import { DEFAULT_PLACEHOLDER } from '../constants';

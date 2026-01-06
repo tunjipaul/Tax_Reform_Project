@@ -1,4 +1,9 @@
-import { API_CONFIG, API_ENDPOINTS, ERROR_MESSAGES, DEFAULT_PLACEHOLDER } from '../constants';
+import {
+  API_CONFIG,
+  API_ENDPOINTS,
+  ERROR_MESSAGES,
+  DEFAULT_PLACEHOLDER,
+} from "../constants";
 
 const fetchWithTimeout = async (url, options = {}) => {
   const controller = new AbortController();
@@ -19,11 +24,11 @@ const fetchWithTimeout = async (url, options = {}) => {
     return await response.json();
   } catch (error) {
     clearTimeout(timeoutId);
-    
-    if (error.name === 'AbortError') {
+
+    if (error.name === "AbortError") {
       throw new Error(ERROR_MESSAGES.TIMEOUT_ERROR);
     }
-    
+
     throw error;
   }
 };
@@ -31,9 +36,9 @@ const fetchWithTimeout = async (url, options = {}) => {
 export const sendChatMessage = async (message, signal = null) => {
   try {
     const response = await fetchWithTimeout(API_ENDPOINTS.CHAT, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         message,
@@ -57,15 +62,15 @@ export const sendChatMessage = async (message, signal = null) => {
 export const fetchPlaceholder = async () => {
   try {
     const response = await fetchWithTimeout(API_ENDPOINTS.PLACEHOLDER, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
     return response.placeholder || DEFAULT_PLACEHOLDER;
   } catch (error) {
-    console.error('Failed to fetch placeholder:', error);
+    console.error("Failed to fetch placeholder:", error);
     return DEFAULT_PLACEHOLDER;
   }
 };
@@ -75,9 +80,9 @@ export const fetchSources = async (messageId) => {
     const response = await fetchWithTimeout(
       `${API_ENDPOINTS.SOURCES}/${messageId}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );
@@ -99,9 +104,9 @@ export const fetchChatHistory = async (userId) => {
     const response = await fetchWithTimeout(
       `${API_ENDPOINTS.HISTORY}?userId=${userId}`,
       {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       }
     );

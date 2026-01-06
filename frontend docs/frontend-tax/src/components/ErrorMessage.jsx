@@ -1,4 +1,3 @@
-import React from 'react';
 import { Bot, AlertTriangle, RefreshCw } from 'lucide-react';
 
 const ErrorMessage = ({ 

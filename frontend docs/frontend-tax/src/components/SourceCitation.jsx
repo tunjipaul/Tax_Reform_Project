@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FileText, ChevronDown, ChevronUp, ExternalLink, CheckCircle } from 'lucide-react';
 
 const SourceCitation = ({ sources = [], isDarkMode = false }) => {
