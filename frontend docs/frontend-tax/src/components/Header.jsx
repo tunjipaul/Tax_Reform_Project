@@ -1,4 +1,3 @@
-import React from 'react';
 import { Building2, Moon, Sun, Plus, User, Menu } from 'lucide-react';
 
 const Header = ({ 
@@ -69,7 +68,7 @@ const Header = ({
               )}
             </button>
 
-            {/* New Chat Button - Hidden on small mobile */}
+            {/* New Chat Hidden on small mobile */}
             {showNewChat && (
               <button 
                 onClick={onNewChat}

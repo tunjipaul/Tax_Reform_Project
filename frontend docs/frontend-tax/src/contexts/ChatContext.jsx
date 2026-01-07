@@ -1,4 +1,4 @@
-import React, { createContext, useState, useCallback, useContext } from 'react';
+import { createContext, useState, useCallback, useContext } from 'react';
 import { useChat } from '../hooks/useChat';
 
 const ChatContext = createContext(null);

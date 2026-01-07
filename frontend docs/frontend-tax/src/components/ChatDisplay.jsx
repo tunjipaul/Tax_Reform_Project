@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Bot, User, Copy, RefreshCw, Share2, ThumbsUp } from 'lucide-react';
 
 const ChatDisplay = ({ messages, isLoading, isDarkMode = false }) => {

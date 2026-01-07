@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import {useEffect } from 'react';
 import { 
   Plus, 
   MessageSquare, 
   Bookmark, 
-  BookOpen, 
   History, 
   Settings, 
-  HelpCircle,
   User,
   Crown,
   ChevronRight,

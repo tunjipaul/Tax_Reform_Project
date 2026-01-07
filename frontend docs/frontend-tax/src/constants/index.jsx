@@ -4,9 +4,9 @@ export const API_CONFIG = {
   TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT) || 30000,
   ENABLE_MOCK: import.meta.env.VITE_ENABLE_MOCK_DATA === "true",
 
-  // Mock API settings (used when ENABLE_MOCK is true)
+
   MOCK_DELAY: 2000, // ms
-  MOCK_ERROR_RATE: 0.2, // 20% chance for mock errors
+  MOCK_ERROR_RATE: 0.2, 
 };
 
 // API Endpoints
@@ -42,8 +42,8 @@ export const MOCK_RECENT_CHATS = [
 ];
 
 export const MOCK_USER = {
-  name: "David Adewale",
-  plan: "Basic Plan",
+  name: "Admin",
+  plan: "",
   userId: "user_123",
 };
 

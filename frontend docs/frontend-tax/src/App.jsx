@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChatProvider } from './contexts/ChatContext';
 import AppLayout from './components/layouts/AppLayout';
 import MainContent from './components/MainContent';
