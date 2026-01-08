@@ -2,7 +2,7 @@
 export const API_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
   TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT) || 30000,
-  ENABLE_MOCK: import.meta.env.VITE_ENABLE_MOCK_DATA === "true",
+  ENABLE_MOCK: import.meta.env.VITE_ENABLE_MOCK_DATA === "True",
 
 
   MOCK_DELAY: 2000, // ms
@@ -10,12 +10,19 @@ export const API_CONFIG = {
 };
 
 // API Endpoints
+
 export const API_ENDPOINTS = {
-  CHAT: `${API_CONFIG.BASE_URL}/chat`,
-  SOURCES: `${API_CONFIG.BASE_URL}/sources`,
-  HISTORY: `${API_CONFIG.BASE_URL}/history`,
-  PLACEHOLDER: `${API_CONFIG.BASE_URL}/placeholder`,
+  CHAT: `${API_CONFIG.BASE_URL}/api/chat`,
+  HEALTH: `${API_CONFIG.BASE_URL}/health`,
+
 };
+
+// export const API_ENDPOINTS = {
+//   CHAT: `${API_CONFIG.BASE_URL}/api/chat`,
+//   SOURCES: `${API_CONFIG.BASE_URL}/sources`,
+//   HISTORY: `${API_CONFIG.BASE_URL}/history`,
+//   PLACEHOLDER: `${API_CONFIG.BASE_URL}/placeholder`,
+// };
 
 // UI Configuration
 export const UI_CONFIG = {
