@@ -1,18 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Send, ArrowUp, Paperclip, Type, Mic, Plus } from 'lucide-react';
-import { fetchPlaceholder } from '../services/api';
-import { DEFAULT_PLACEHOLDER } from '../constants';
+import { useState, useEffect } from "react";
+import { Send, ArrowUp, Paperclip, Type, Mic, Plus } from "lucide-react";
+import { fetchPlaceholder } from "../services/api";
+import { DEFAULT_PLACEHOLDER } from "../constants";
 
-const ChatInput = ({ 
-  onSend, 
+const ChatInput = ({
+  onSend,
   placeholder,
   disabled = false,
-  variant = 'default',
-  isDarkMode = false
+  variant = "default",
+  isDarkMode = false,
 }) => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [charCount, setCharCount] = useState(0);
-  const [dynamicPlaceholder, setDynamicPlaceholder] = useState(placeholder || DEFAULT_PLACEHOLDER);
+  const [dynamicPlaceholder, setDynamicPlaceholder] = useState(
+    placeholder || DEFAULT_PLACEHOLDER
+  );
   const maxChars = 2000;
 
   // Fetch placeholder from backend on mount
@@ -31,7 +33,7 @@ const ChatInput = ({
     e.preventDefault();
     if (message.trim() && !disabled) {
       onSend(message);
-      setMessage('');
+      setMessage("");
       setCharCount(0);
     }
   };
@@ -45,33 +47,40 @@ const ChatInput = ({
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
   };
 
   return (
-    <div className={`px-6 pb-6 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`px-6 pb-6 ${isDarkMode ? "bg-gray-900" : "bg-gray-50"}`}>
       <div className="max-w-4xl mx-auto">
-        <form onSubmit={handleSubmit} className={`rounded-xl shadow-sm ${
-          isDarkMode 
-            ? 'bg-gray-800 border border-gray-700' 
-            : 'bg-white border border-gray-200'
-        }`}>
+        <form
+          onSubmit={handleSubmit}
+          className={`rounded-xl shadow-sm ${
+            isDarkMode
+              ? "bg-gray-800 border border-gray-700"
+              : "bg-white border border-gray-200"
+          }`}
+        >
           {/* Input Area */}
           <div className="relative">
-            {variant === 'with-attachments' && (
-              <button 
+            {variant === "with-attachments" && (
+              <button
                 type="button"
                 className={`absolute left-4 top-4 p-2 rounded-lg transition-colors ${
-                  isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                  isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
                 }`}
               >
-                <Plus className={`w-5 h-5 ${isDarkMode ? 'text-gray-400' : 'text-gray-400'}`} />
+                <Plus
+                  className={`w-5 h-5 ${
+                    isDarkMode ? "text-gray-400" : "text-gray-400"
+                  }`}
+                />
               </button>
             )}
-            
+
             <textarea
               value={message}
               onChange={handleChange}
@@ -80,62 +89,71 @@ const ChatInput = ({
               disabled={disabled}
               rows={1}
               className={`w-full px-6 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none resize-none ${
-                variant === 'with-attachments' ? 'pl-14' : ''
+                variant === "with-attachments" ? "pl-14" : ""
               } ${
-                isDarkMode 
-                  ? 'text-gray-200 placeholder-gray-500' 
-                  : 'text-gray-900 placeholder-gray-400'
+                isDarkMode
+                  ? "text-gray-200 placeholder-gray-500"
+                  : "text-gray-900 placeholder-gray-400"
               }`}
-              style={{ minHeight: '60px', maxHeight: '200px' }}
+              style={{ minHeight: "60px", maxHeight: "200px" }}
             />
           </div>
 
           {/* Bottom Bar */}
           <div className="flex items-center justify-between px-6 pb-4 pt-2">
             <div className="flex items-center gap-2">
-              {variant === 'advanced' && (
+              {variant === "advanced" && (
                 <>
-                  <button 
+                  <button
                     type="button"
                     className={`p-2 rounded-lg transition-colors ${
-                      isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                      isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
                     }`}
                     title="Attach file"
                   >
-                    <Paperclip className={`w-5 h-5 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-400'
-                    }`} />
+                    <Paperclip
+                      className={`w-5 h-5 ${
+                        isDarkMode ? "text-gray-400" : "text-gray-400"
+                      }`}
+                    />
                   </button>
-                  <button 
+                  <button
                     type="button"
                     className={`p-2 rounded-lg transition-colors ${
-                      isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                      isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
                     }`}
                     title="Text formatting"
                   >
-                    <Type className={`w-5 h-5 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-400'
-                    }`} />
+                    <Type
+                      className={`w-5 h-5 ${
+                        isDarkMode ? "text-gray-400" : "text-gray-400"
+                      }`}
+                    />
                   </button>
-                  <button 
+                  <button
                     type="button"
                     className={`p-2 rounded-lg transition-colors ${
-                      isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                      isDarkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"
                     }`}
                     title="Voice input"
                   >
-                    <Mic className={`w-5 h-5 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-400'
-                    }`} />
+                    <Mic
+                      className={`w-5 h-5 ${
+                        isDarkMode ? "text-gray-400" : "text-gray-400"
+                      }`}
+                    />
                   </button>
                 </>
               )}
-              
-              <p className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-500'}`}>
-                {variant === 'simple' 
-                  ? 'AI can make mistakes. Please verify important information with official gazetted documents.'
-                  : `${charCount} / ${maxChars}`
-                }
+
+              <p
+                className={`text-xs ${
+                  isDarkMode ? "text-gray-500" : "text-gray-500"
+                }`}
+              >
+                {variant === "simple"
+                  ? "AI can make mistakes. Please verify important information with official gazetted documents."
+                  : `${charCount} / ${maxChars}`}
               </p>
             </div>
 
@@ -144,13 +162,13 @@ const ChatInput = ({
               disabled={!message.trim() || disabled}
               className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
                 message.trim() && !disabled
-                  ? 'bg-green-600 hover:bg-green-700' 
+                  ? "bg-green-600 hover:bg-green-700"
                   : isDarkMode
-                    ? 'bg-gray-700 cursor-not-allowed'
-                    : 'bg-gray-300 cursor-not-allowed'
+                  ? "bg-gray-700 cursor-not-allowed"
+                  : "bg-gray-300 cursor-not-allowed"
               }`}
             >
-              {variant === 'arrow' ? (
+              {variant === "arrow" ? (
                 <ArrowUp className="w-5 h-5 text-white" />
               ) : (
                 <Send className="w-5 h-5 text-white" />
@@ -160,11 +178,14 @@ const ChatInput = ({
         </form>
 
         {/* Disclaimer */}
-        {variant !== 'simple' && (
-          <p className={`text-xs text-center mt-3 ${
-            isDarkMode ? 'text-gray-500' : 'text-gray-500'
-          }`}>
-            AI-generated responses. Please consult a professional for critical tax advice.
+        {variant !== "simple" && (
+          <p
+            className={`text-xs text-center mt-3 ${
+              isDarkMode ? "text-gray-500" : "text-gray-500"
+            }`}
+          >
+            AI-generated responses. Please consult a professional for critical
+            tax advice.
           </p>
         )}
       </div>
