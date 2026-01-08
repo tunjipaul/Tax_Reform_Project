@@ -27,6 +27,5 @@ POST /api/chat - Send message
 
 
 .env file must contain
-GEMINI_API_KEY = "AIzaSyDoDIE159Xet3bEiO5FI7JCgZ9f5FR39yE"
-
+GEMINI_API_KEY = ""
 DATABASE_URL = mysql+pymysql://root:Ademsbbb@localhost:3306/tax_reform
