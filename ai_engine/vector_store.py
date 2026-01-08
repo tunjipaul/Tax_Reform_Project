@@ -248,7 +248,7 @@ def test_retrieval(store: VectorStore, query: str):
 
 
 if __name__ == "__main__":
-    from document_processor import load_and_chunk_documents
+    from .document_processor import load_and_chunk_documents
     
     # Load documents
     print("📚 Loading and chunking documents...")

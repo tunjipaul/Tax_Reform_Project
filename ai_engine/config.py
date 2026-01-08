@@ -8,7 +8,12 @@ from pathlib import Path
 from typing import Optional
 from dataclasses import dataclass
 from dotenv import load_dotenv
+
+# Load .env file
 load_dotenv()
+
+# Define Base Directory (Absolute Path to 'ai_engine' folder)
+BASE_DIR = Path(__file__).parent.absolute()
 
 @dataclass
 class Config:
@@ -31,19 +36,20 @@ class Config:
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 200
     RETRIEVAL_TOP_K: int = 5
-    SIMILARITY_THRESHOLD: float = 0.35 # Revised from 0.7
+    SIMILARITY_THRESHOLD: float = 0.35  # Revised from 0.7
     
     # Memory Configuration
     MAX_CONVERSATION_HISTORY: int = 5  # Last 5 Q&A pairs
     SESSION_TIMEOUT: int = 3600  # 1 hour in seconds
     
-    # Vector Store Configuration
-    VECTOR_STORE_PATH: str = "./chroma_db"
+    # Vector Store Configuration (Absolute Paths)
+    # This ensures consistent access regardless of execution directory
+    VECTOR_STORE_PATH: str = str(BASE_DIR / "chroma_db")
     COLLECTION_NAME: str = "tax_reform_bills"
     
-    # Document Processing
+    # Document Processing (Absolute Paths)
     SUPPORTED_FORMATS: list = None
-    DOCS_DIRECTORY: str = "./documents"
+    DOCS_DIRECTORY: str = str(BASE_DIR / "documents")
     
     # Performance
     USE_ASYNC: bool = True
@@ -52,7 +58,7 @@ class Config:
     
     # Logging
     LOG_LEVEL: str = "INFO"
-    LOG_FILE: str = "ai_engine.log"
+    LOG_FILE: str = str(BASE_DIR / "ai_engine.log")
     
     def __post_init__(self):
         if self.SUPPORTED_FORMATS is None:
@@ -78,7 +84,8 @@ class Config:
             EMBEDDING_MODEL=os.getenv("EMBEDDING_MODEL", "text-embedding-004"),
             TEMPERATURE=float(os.getenv("TEMPERATURE", "0.1")),
             CHUNK_SIZE=int(os.getenv("CHUNK_SIZE", "1000")),
-            VECTOR_STORE_PATH=os.getenv("VECTOR_STORE_PATH", "./chroma_db"),
+            # Use default absolute path unless explicitly overridden
+            VECTOR_STORE_PATH=os.getenv("VECTOR_STORE_PATH", str(BASE_DIR / "chroma_db")),
         )
     
     def validate(self) -> bool:
@@ -105,17 +112,17 @@ SYSTEM_PROMPTS = {
     "main": """You are an AI assistant specializing in Nigeria's 2024 Tax Reform Bills.
 
 Your role:
-- Answer questions about the tax reform bills accurately
-- Cite sources from the official documents
+- Answer questions about the tax reform bills accurately based ONLY on the provided documents.
+- Cite sources from the official documents.
 - Explain complex tax concepts in clear, standard English that is easy to understand.
-- If the answer is not in the provided context, say "I cannot find this information in the provided documents."
-- Correct misinformation with factual information
+- Correct misinformation with factual information.
 
 Guidelines:
-- ALWAYS cite sources when answering policy questions
+- **STRICTLY GROUNDED**: Base your answers ONLY on the provided Context. Do not use external knowledge or pre-training data (which may be outdated).
+- ALWAYS cite sources when answering policy questions.
 - Use format: [Source: Nigeria Tax Bill 2024, Section X]
-- If you don't know, say so - don't make up information
-- Be concise but thorough
+- If the answer is not in the provided context, say "I cannot find this information in the provided documents."
+- Be concise but thorough.
 - **IMPORTANT**: Use standard English. Do NOT use Pidgin English. Maintain a professional yet accessible tone suitable for a general Nigerian audience.
 
 Remember: People's livelihoods depend on understanding these reforms correctly.""",
