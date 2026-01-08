@@ -116,25 +116,18 @@
 
 
 
-
-
-
-
-
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from slowapi import Limiter
 from slowapi.util import get_remote_address
+import asyncio
 
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.db.models import Message
 from app.db.database import SessionLocal
-from app.services.ai_engine import get_ai_agent
-
-import asyncio
+from app.services.ai_engine import chat_with_agent
 
 router = APIRouter()
-
 limiter = Limiter(key_func=get_remote_address)
 
 # -------------------------------
@@ -150,55 +143,54 @@ def get_db():
 # -------------------------------
 # Chat Endpoint (RATE LIMITED)
 # -------------------------------
-@router.post(
-    "/",
-    response_model=ChatResponse,
-)
-@limiter.limit("5/minute")  # ✅ FIX FOR ISSUE #9
+@router.post("/", response_model=ChatResponse)
+@limiter.limit("5/minute")
 async def chat_endpoint(
     request: Request,
     payload: ChatRequest,
     db: Session = Depends(get_db)
 ):
     """
-    Handles chat requests with rate limiting
+    Handles chat requests using the singleton AI engine.
     """
-
-    agent = get_ai_agent()
 
     try:
         response_dict = await asyncio.wait_for(
-            asyncio.to_thread(
-                agent.chat,
+            chat_with_agent(
                 message=payload.message,
                 session_id=payload.session_id,
-                conversation_history=payload.conversation_history
+                conversation_history=payload.conversation_history,
             ),
-            timeout=30  # (Issue #7 protection)
+            timeout=30,
         )
 
-        response_text = response_dict.get("response", "")
+        # Save messages (non-blocking)
+        try:
+            db.add(Message(
+                session_id=payload.session_id,
+                role="user",
+                content=payload.message,
+                extra_data={}
+            ))
 
-        db.add(Message(
-            session_id=payload.session_id,
-            role="user",
-            content=payload.message,
-            extra_data={}
-        ))
+            db.add(Message(
+                session_id=payload.session_id,
+                role="assistant",
+                content=response_dict["response"],
+                extra_data=response_dict
+            ))
 
-        db.add(Message(
-            session_id=payload.session_id,
-            role="assistant",
-            content=response_text,
-            extra_data=response_dict
-        ))
-
-        db.commit()
+            db.commit()
+        except Exception as db_err:
+            print(f"⚠️ DB write failed: {db_err}")
 
         return ChatResponse(**response_dict)
 
     except asyncio.TimeoutError:
-        raise HTTPException(
-            status_code=504,
-            detail="AI response timed out. Please try again."
-        )
+        raise HTTPException(status_code=504, detail="AI response timed out.")
+
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI error: {e}")
