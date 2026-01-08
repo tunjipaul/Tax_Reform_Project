@@ -10,9 +10,9 @@ import operator
 from langgraph.graph import StateGraph, END
 from google import genai
 
-from config import config, SYSTEM_PROMPTS
-from vector_store import VectorStore
-from memory import ConversationMemory
+from .config import config, SYSTEM_PROMPTS
+from .vector_store import VectorStore
+from .memory import ConversationMemory
 
 
 # =============================================================================

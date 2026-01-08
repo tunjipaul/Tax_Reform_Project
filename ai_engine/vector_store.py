@@ -9,8 +9,8 @@ from typing import List, Dict, Optional
 from google import genai
 from google.genai import types # Updated import
 
-from config import config
-from document_processor import DocumentChunk
+from .config import config
+from .document_processor import DocumentChunk
 
 
 class GeminiEmbeddings:

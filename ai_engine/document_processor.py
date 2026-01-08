@@ -12,7 +12,7 @@ import PyPDF2
 from docx import Document as DocxDocument
 import re
 
-from config import config
+from .config import config
 
 @dataclass
 class DocumentChunk:
