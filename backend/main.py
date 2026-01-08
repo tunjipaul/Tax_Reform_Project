@@ -14,11 +14,14 @@ import os
 import sys
 
 # Add root directory to path so we can import ai_engine
+# This ensures we can find 'ai_engine' even if running from backend/ folder
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from ai_engine.agent import create_agent, TaxQAAgent
 from ai_engine.vector_store import VectorStore
 from ai_engine.config import config
+# Import for auto-ingestion capability
+from ai_engine.document_processor import load_and_chunk_documents
 
 # --- GLOBAL STATE ---
 ai_agent: Optional[TaxQAAgent] = None
@@ -28,21 +31,43 @@ ai_agent: Optional[TaxQAAgent] = None
 async def lifespan(app: FastAPI):
     """
     Handle startup and shutdown events.
-    Initializes the AI Agent once to keep DB connection alive.
+    Initializes the AI Agent and performs auto-ingestion if DB is empty.
     """
     global ai_agent
     print("🚀 BACKEND: Initializing AI Engine...")
     
     try:
-        # Initialize Vector Store (connects to existing persistent DB)
+        # Initialize Vector Store (connects to existing persistent DB or creates new)
         store = VectorStore()
-        store.create_collection() # Connects to existing collection
+        store.create_collection() 
         
+        # --- AUTO-INGESTION CHECK ---
+        # Check if the collection is empty (e.g., fresh git clone)
+        stats = store.get_collection_stats()
+        doc_count = stats.get("total_documents", 0)
+        
+        if doc_count == 0:
+            print("⚠️ Collection is empty. Starting automatic data ingestion...")
+            print(f"📂 Looking for documents in: {config.DOCS_DIRECTORY}")
+            
+            # Run ingestion pipeline
+            chunks = load_and_chunk_documents()
+            
+            if chunks:
+                store.add_documents(chunks)
+                print(f"✅ Auto-ingestion complete! Added {len(chunks)} chunks.")
+            else:
+                print("❌ No documents found to ingest. Agent will have no knowledge.")
+        else:
+            print(f"✅ Found existing collection with {doc_count} documents.")
+            
         # Create the Agent
         ai_agent = create_agent(store)
         print("✅ BACKEND: AI Agent Ready!")
+        
     except Exception as e:
         print(f"❌ BACKEND: Failed to initialize AI Agent: {e}")
+        # We don't raise here to allow the API to start, but /api/chat will fail gracefully
     
     yield
     
@@ -90,9 +115,6 @@ class ChatResponse(BaseModel):
     timestamp: str
 
 # --- ENDPOINTS ---
-@app.get("/")
-async def root():
-    return {"message": "Welcome to the Nigeria Tax Reform Bills Q&A Assistant API"}
 
 @app.get("/health")
 async def health_check():
