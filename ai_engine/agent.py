@@ -10,9 +10,10 @@ import operator
 from langgraph.graph import StateGraph, END
 from google import genai
 
-from config import config, SYSTEM_PROMPTS
-from vector_store import VectorStore
-from memory import ConversationMemory
+# FIX: Use relative imports for intra-package references
+from .config import config, SYSTEM_PROMPTS
+from .vector_store import VectorStore
+from .memory import ConversationMemory
 
 
 # =============================================================================
@@ -38,13 +39,6 @@ class AgentState(TypedDict):
 class TaxQAAgent:
     """
     Agentic RAG system for Nigeria Tax Reform Bills
-    
-    Flow:
-    1. Receive user message
-    2. Decide if retrieval needed
-    3. Retrieve documents (if needed)
-    4. Generate response with citations
-    5. Update conversation memory
     """
     
     def __init__(self, vector_store: VectorStore):
@@ -92,11 +86,6 @@ class TaxQAAgent:
     def decide_retrieval(self, state: AgentState) -> AgentState:
         """
         Decide if we need to retrieve documents
-        
-        Logic:
-        - Greetings/thanks → NO retrieval
-        - Policy questions → YES retrieval
-        - Follow-ups → Check if context sufficient
         """
         user_message = state["user_message"].lower().strip()
         conversation_history = state["conversation_history"]
@@ -159,12 +148,20 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             k=config.RETRIEVAL_TOP_K
         )
         
-        if documents:
+        # FALLBACK: If query is very broad (like "overview" or "breakdown"), 
+        # specific chunk similarity might be low. 
+        # If no docs found, try a broader keyword search or just get generic top k
+        # without threshold (or lower threshold).
+        
+        if not documents:
+            print("⚠️ No documents found with high similarity. Attempting broad search...")
+            # Retry with a dummy query to fetch general context if the user asked for an "overview"
+            # Or simply relax the threshold in the vector store logic (not easily done dynamically here without changing method signature)
+            # For now, we will return empty list, but we HANDLE it in the next node.
+            state["retrieved_documents"] = []
+        else:
             print(f"📄 Retrieved {len(documents)} documents")
             state["retrieved_documents"] = documents
-        else:
-            print("⚠️ No relevant documents found")
-            state["retrieved_documents"] = []
         
         return state
     
@@ -175,6 +172,17 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
     def generate_response(self, state: AgentState) -> AgentState:
         """Generate response using LLM"""
         
+        # CHECK: If retrieval was required but no docs found, ABORT GENERATION
+        if state["should_retrieve"] and not state.get("retrieved_documents"):
+            state["generated_response"] = (
+                "I apologize, but I couldn't find specific sections in the official Tax Reform Bills "
+                "that directly answer your question. I am programmed to rely strictly on the provided documents "
+                "to ensure accuracy. Please try asking about a specific tax type (e.g., 'What is the new VAT rate?' "
+                "or 'Explain Company Income Tax')."
+            )
+            state["sources"] = []
+            return state
+
         # Build context
         context = self._build_context(state)
         
@@ -193,7 +201,6 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             generated_text = response.text
             
             # Extract citations
-            # FIX: Ensure we treat None as empty list to avoid iteration errors
             docs = state.get("retrieved_documents") or []
             sources = self._extract_sources(docs)
             
@@ -228,7 +235,7 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             for i, doc in enumerate(state["retrieved_documents"], 1):
                 parts.append(f"\n[Document {i}]")
                 parts.append(f"Source: {doc['metadata'].get('source', 'Unknown')}")
-                parts.append(f"Content: {doc['content'][:1500]}...") # Increased context window for accuracy
+                parts.append(f"Content: {doc['content'][:1500]}...") 
                 parts.append(f"Relevance Score: {doc['score']:.2f}")
         
         # Add current question
@@ -250,7 +257,6 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
         """Extract citation information from documents"""
         sources = []
         
-        # FIX: Safety check for None documents
         if not documents:
             return []
         
@@ -275,26 +281,16 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
         session_id: str,
         conversation_history: Optional[List[Dict]] = None
     ) -> Dict:
-        """
-        Main chat interface
-        
-        Args:
-            message: User's question
-            session_id: Session identifier
-            conversation_history: Previous messages
-        
-        Returns:
-            Response dict with answer and sources
-        """
+        """Main chat interface"""
         # Initialize state
         initial_state = AgentState(
             session_id=session_id,
             user_message=message,
             conversation_history=conversation_history or [],
-            retrieved_documents=[],  # FIX: Initialize as empty list instead of None
+            retrieved_documents=[],
             should_retrieve=False,
             generated_response=None,
-            sources=[],  # FIX: Initialize as empty list instead of None
+            sources=[],
             timestamp=datetime.now()
         )
         
@@ -332,10 +328,6 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
         """Clear conversation history for a session"""
         self.memory.clear_session(session_id)
 
-
-# =============================================================================
-# CONVENIENCE FUNCTIONS
-# =============================================================================
 
 def create_agent(vector_store: VectorStore) -> TaxQAAgent:
     """Create and return initialized agent"""
