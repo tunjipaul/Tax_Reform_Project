@@ -115,6 +115,9 @@ class ChatResponse(BaseModel):
     timestamp: str
 
 # --- ENDPOINTS ---
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Nigeria Tax Reform Bills Q&A API"}
 
 @app.get("/health")
 async def health_check():
