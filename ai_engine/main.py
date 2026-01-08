@@ -6,11 +6,11 @@ Main entry point for AI Engine - Nigeria Tax Reform Bills Q&A Assistant
 import sys
 from pathlib import Path
 
-from config import config
-from document_processor import load_and_chunk_documents
-from vector_store import VectorStore, initialize_vector_store
-from agent import TaxQAAgent, create_agent
-from utils import setup_logger, Timer
+from .config import config
+from .document_processor import load_and_chunk_documents
+from .vector_store import VectorStore, initialize_vector_store
+from .agent import TaxQAAgent, create_agent
+from .utils import setup_logger, Timer
 
 
 logger = setup_logger("main", config.LOG_FILE, config.LOG_LEVEL)

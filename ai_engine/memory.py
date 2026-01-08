@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import json
 
-from config import config
+from .config import config
 
 
 class ConversationMemory:
