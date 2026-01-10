@@ -1,7 +1,8 @@
 import { Bot } from 'lucide-react';
+import { cn, getBgColor, getTextColor, getBorderColor } from '../utils/classNames';
 
 const LoadingIndicator = ({ 
-  message = "Analyzing Finance Act 2024 Database...",
+  message = "Searching tax reform documents...",
   isDarkMode = false 
 }) => {
   return (
@@ -12,7 +13,7 @@ const LoadingIndicator = ({
 
       <div className="flex flex-col max-w-3xl">
         <div className="flex items-center gap-2 mb-2">
-          <span className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+          <span className={cn('text-sm font-medium', getTextColor(isDarkMode))}>
             Tax Assistant
           </span>
           <span className="text-xs text-yellow-600 flex items-center gap-1">
@@ -20,8 +21,12 @@ const LoadingIndicator = ({
           </span>
         </div>
 
-        <div className={`rounded-2xl px-6 py-4 border ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-          <p className={`text-sm flex items-center gap-2 mb-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+        <div className={cn(
+          'rounded-2xl px-6 py-4 border',
+          getBgColor(isDarkMode, 'bg-white', 'bg-gray-800'),
+          getBorderColor(isDarkMode)
+        )}>
+          <p className={cn('text-sm flex items-center gap-2 mb-4', getTextColor(isDarkMode, 'text-gray-600', 'text-gray-400'))}>
             <span className="flex gap-1">
               <span className="w-2 h-2 bg-green-600 rounded-full animate-bounce"></span>
               <span className="w-2 h-2 bg-green-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></span>
@@ -31,9 +36,9 @@ const LoadingIndicator = ({
           </p>
 
           <div className="space-y-2">
-            <div className={`h-4 rounded animate-pulse ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-            <div className={`h-4 rounded animate-pulse w-5/6 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
-            <div className={`h-4 rounded animate-pulse w-4/6 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+            <div className={cn('h-4 rounded animate-pulse', getBgColor(isDarkMode, 'bg-gray-200', 'bg-gray-700'))}></div>
+            <div className={cn('h-4 rounded animate-pulse w-5/6', getBgColor(isDarkMode, 'bg-gray-200', 'bg-gray-700'))}></div>
+            <div className={cn('h-4 rounded animate-pulse w-4/6', getBgColor(isDarkMode, 'bg-gray-200', 'bg-gray-700'))}></div>
           </div>
         </div>
       </div>

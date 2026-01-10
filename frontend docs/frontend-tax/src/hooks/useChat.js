@@ -1,12 +1,15 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { API_CONFIG, ERROR_MESSAGES, SUCCESS_MESSAGES } from '../constants';
-import { sendChatMessage } from '../services/api';
+import { sendChatMessage, generateSessionId } from '../services/api';
 
 export const useChat = () => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showSources, setShowSources] = useState(false);
+  
+  // Session ID as ref so it can be regenerated on new chat
+  const sessionIdRef = useRef(generateSessionId());
   
   const pendingTimeoutRef = useRef(null);
   const abortControllerRef = useRef(null);
@@ -21,6 +24,14 @@ export const useChat = () => {
       }
     };
   }, []);
+
+  // Build history from messages for API
+  const buildHistory = useCallback(() => {
+    return messages.map(msg => ({
+      role: msg.isUser ? 'user' : 'assistant',
+      content: msg.text
+    }));
+  }, [messages]);
 
   const sendMessage = useCallback(async (text) => {
     if (!text.trim()) return;
@@ -58,6 +69,7 @@ export const useChat = () => {
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           showActions: true,
           source: 'Finance Act 2024, Section 15 (VAT Modifications)',
+          sources: [],
           id: Date.now() + 1
         };
         
@@ -67,22 +79,31 @@ export const useChat = () => {
       } else {
         abortControllerRef.current = new AbortController();
 
-        const result = await sendChatMessage(text, abortControllerRef.current.signal);
+        // Build history from previous messages
+        const history = buildHistory();
+
+        const result = await sendChatMessage(
+          text, 
+          sessionIdRef.current, 
+          history,
+          abortControllerRef.current.signal
+        );
 
         if (result.success) {
           const botMessage = {
-            text: result.data.message || result.data.response,
+            text: result.data.response || result.data.message,
             isUser: false,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             showActions: true,
-            source: result.data.source || null,
-            messageId: result.data.messageId || `msg_${Date.now()}`,
+            sources: result.data.sources || [],
+            retrieved: result.data.retrieved || false,
+            messageId: result.data.session_id || `msg_${Date.now()}`,
             id: Date.now() + 1
           };
           
           setMessages(prev => [...prev, botMessage]);
           
-          if (result.data.sources || result.data.source) {
+          if (result.data.sources && result.data.sources.length > 0) {
             setShowSources(true);
           }
         } else {
@@ -99,7 +120,7 @@ export const useChat = () => {
       setIsLoading(false);
       pendingTimeoutRef.current = null;
     }
-  }, []);
+  }, [buildHistory]);
 
   const retry = useCallback(() => {
     setError(null);
@@ -113,6 +134,8 @@ export const useChat = () => {
     setMessages([]);
     setError(null);
     setShowSources(false);
+    // Generate new session ID for new chat
+    sessionIdRef.current = generateSessionId();
   }, []);
 
   const cancelRequest = useCallback(() => {
@@ -125,6 +148,15 @@ export const useChat = () => {
     setIsLoading(false);
   }, []);
 
+  // Load messages from a previous session
+  const loadMessages = useCallback((newMessages) => {
+    setMessages(newMessages);
+    setError(null);
+    if (newMessages.some(m => m.sources && m.sources.length > 0)) {
+      setShowSources(true);
+    }
+  }, []);
+
   return {
     messages,
     isLoading,
@@ -133,7 +165,8 @@ export const useChat = () => {
     sendMessage,
     retry,
     clearMessages,
-    cancelRequest
+    cancelRequest,
+    loadMessages
   };
 };
 

@@ -25,6 +25,12 @@ export const ChatProvider = ({ children }) => {
     handleSendMessage(suggestion.text);
   }, [handleSendMessage]);
 
+  // Load a previous session's messages
+  const handleLoadSession = useCallback((messages) => {
+    setShowWelcome(false);
+    chat.loadMessages(messages);
+  }, [chat]);
+
   const value = {
     messages: chat.messages,
     isLoading: chat.isLoading,
@@ -35,10 +41,12 @@ export const ChatProvider = ({ children }) => {
     retry: chat.retry,
     clearMessages: chat.clearMessages,
     cancelRequest: chat.cancelRequest,
+    loadMessages: chat.loadMessages,
     handleSendMessage,
     handleNewChat,
     handleWelcomeCardClick,
     handleSuggestionSelect,
+    handleLoadSession,
   };
 
   return (

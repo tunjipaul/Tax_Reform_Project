@@ -88,7 +88,7 @@ const ChatInput = ({
               placeholder={dynamicPlaceholder}
               disabled={disabled}
               rows={1}
-              className={`w-full px-6 py-4 text-gray-900 placeholder-gray-400 bg-transparent focus:outline-none resize-none ${
+              className={`w-full px-6 py-4 bg-transparent focus:outline-none resize-none ${
                 variant === "with-attachments" ? "pl-14" : ""
               } ${
                 isDarkMode

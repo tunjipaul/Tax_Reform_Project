@@ -90,6 +90,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files to serve PDF documents
+from fastapi.staticfiles import StaticFiles
+documents_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ai_engine", "documents")
+if os.path.exists(documents_path):
+    app.mount("/documents", StaticFiles(directory=documents_path), name="documents")
+    print(f"📄 Serving documents from: {documents_path}")
+
+
 # --- DATA MODELS (Pydantic) ---
 
 class ChatRequest(BaseModel):
@@ -173,6 +181,91 @@ async def chat_endpoint(request: ChatRequest):
         print(f"❌ Error processing request: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
+# --- SESSIONS ENDPOINTS ---
+
+@app.get("/api/sessions")
+async def list_sessions():
+    """
+    List all conversation sessions with metadata.
+    Used by frontend sidebar to show chat history.
+    """
+    global ai_agent
+    
+    if not ai_agent:
+        return {"sessions": []}
+    
+    sessions = []
+    for session_id in ai_agent.memory.get_all_sessions():
+        info = ai_agent.memory.get_session_info(session_id)
+        history = ai_agent.memory.get_history(session_id, limit=1)
+        
+        # Get first user message as title
+        first_message = next(
+            (msg["content"] for msg in ai_agent.memory.get_history(session_id) if msg["role"] == "user"),
+            "New Chat"
+        )
+        
+        sessions.append({
+            "session_id": session_id,
+            "title": first_message[:40] + "..." if len(first_message) > 40 else first_message,
+            "created_at": info.get("created_at") if info else None,
+            "last_active": info.get("last_active") if info else None,
+            "message_count": info.get("message_count", 0) if info else 0
+        })
+    
+    # Sort by last_active (most recent first)
+    sessions.sort(key=lambda x: x.get("last_active") or "", reverse=True)
+    
+    return {"sessions": sessions}
+
+
+@app.get("/api/sessions/{session_id}")
+async def get_session(session_id: str):
+    """
+    Get full conversation history for a specific session.
+    Used to restore a previous chat when user clicks on it.
+    """
+    global ai_agent
+    
+    if not ai_agent:
+        raise HTTPException(status_code=503, detail="AI Engine is not initialized")
+    
+    history = ai_agent.memory.get_history(session_id)
+    info = ai_agent.memory.get_session_info(session_id)
+    
+    if not history:
+        raise HTTPException(status_code=404, detail=f"Session {session_id} not found")
+    
+    # Transform messages to frontend format
+    messages = []
+    for msg in history:
+        messages.append({
+            "text": msg["content"],
+            "isUser": msg["role"] == "user",
+            "timestamp": msg.get("timestamp", ""),
+            "showActions": msg["role"] == "assistant"
+        })
+    
+    return {
+        "session_id": session_id,
+        "messages": messages,
+        "metadata": info
+    }
+
+
+@app.delete("/api/sessions/{session_id}")
+async def delete_session(session_id: str):
+    """Clear a specific session's history"""
+    global ai_agent
+    
+    if not ai_agent:
+        raise HTTPException(status_code=503, detail="AI Engine is not initialized")
+    
+    ai_agent.memory.clear_session(session_id)
+    return {"success": True, "message": f"Session {session_id} cleared"}
+
+
 if __name__ == "__main__":
     # Run development server
-    uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("backend.main:app", port=8000, reload=True)

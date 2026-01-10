@@ -5,7 +5,7 @@ import ErrorMessage from '../ErrorMessage';
 import SourceCitation from '../SourceCitation';
 import SuggestedActions from '../SuggestedActions';
 import { useChatContext } from '../../contexts/ChatContext';
-import { MOCK_SOURCES, FOLLOWUP_SUGGESTIONS } from '../../constants';
+import { FOLLOWUP_SUGGESTIONS } from '../../constants';
 
 const ChatView = ({ isDarkMode }) => {
   const { 
@@ -19,6 +19,10 @@ const ChatView = ({ isDarkMode }) => {
   } = useChatContext();
 
   const hasMessages = messages.length > 0;
+  
+  // Get sources from the last assistant message (from backend)
+  const lastBotMessage = messages.filter(m => !m.isUser).pop();
+  const activeSources = lastBotMessage?.sources || [];
 
   return (
     <>
@@ -34,7 +38,6 @@ const ChatView = ({ isDarkMode }) => {
 
           {isLoading && (
             <LoadingIndicator 
-              message="Analyzing Finance Act 2024 Database..." 
               isDarkMode={isDarkMode} 
             />
           )}
@@ -47,9 +50,9 @@ const ChatView = ({ isDarkMode }) => {
             />
           )}
 
-          {showSources && !isLoading && !error && hasMessages && (
+          {showSources && !isLoading && !error && hasMessages && activeSources.length > 0 && (
             <SourceCitation 
-              sources={MOCK_SOURCES} 
+              sources={activeSources} 
               isDarkMode={isDarkMode} 
             />
           )}

@@ -1,4 +1,5 @@
 import { Building2, Moon, Sun, Plus, User, Menu } from 'lucide-react';
+import { cn, getBgColor, getTextColor, getBorderColor, getHoverBg } from '../utils/classNames';
 
 const Header = ({ 
   variant = 'default', 
@@ -6,42 +7,47 @@ const Header = ({
   showNewChat = true, 
   onDarkModeToggle, 
   isDarkMode = false,
-  onMenuToggle // New prop for mobile menu
+  onMenuToggle
 }) => {
   // Variant styles with dark mode support
   const getHeaderStyles = () => {
     if (variant === 'primary') return 'bg-green-700 text-white';
-    if (variant === 'simple') return isDarkMode ? 'bg-gray-800 border-b border-gray-700' : 'bg-white border-b border-gray-200';
-    return isDarkMode ? 'bg-gray-800 border-b border-gray-700' : 'bg-white border-b border-gray-200';
+    return cn(
+      getBgColor(isDarkMode, 'bg-white', 'bg-gray-800'),
+      'border-b',
+      getBorderColor(isDarkMode)
+    );
   };
 
   return (
-    <header className={`px-4 sm:px-6 py-4 flex items-center justify-between ${getHeaderStyles()}`}>
+    <header className={cn('px-4 sm:px-6 py-4 flex items-center justify-between', getHeaderStyles())}>
       <div className="flex items-center gap-3">
         {/* Mobile Hamburger Menu */}
         <button
           onClick={onMenuToggle}
-          className={`md:hidden p-2 rounded-lg transition-colors ${
-            isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-          }`}
+          className={cn('md:hidden p-2 rounded-lg transition-colors', getHoverBg(isDarkMode))}
           aria-label="Open menu"
         >
-          <Menu className={`w-6 h-6 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+          <Menu className={cn('w-6 h-6', getTextColor(isDarkMode, 'text-gray-600', 'text-gray-300'))} />
         </button>
 
         {/* Logo and Title */}
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 ${variant === 'primary' ? 'bg-white' : 'bg-green-600'} rounded-lg flex items-center justify-center`}>
-            <Building2 className={`w-6 h-6 ${variant === 'primary' ? 'text-green-600' : 'text-white'}`} />
+          <div className={cn(
+            'w-10 h-10 rounded-lg flex items-center justify-center',
+            variant === 'primary' ? 'bg-white' : 'bg-green-600'
+          )}>
+            <Building2 className={cn('w-6 h-6', variant === 'primary' ? 'text-green-600' : 'text-white')} />
           </div>
           <div className="hidden sm:block">
-            <h1 className={`text-xl font-semibold ${
-              variant === 'primary' ? 'text-white' : isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>
+            <h1 className={cn(
+              'text-xl font-semibold',
+              variant === 'primary' ? 'text-white' : getTextColor(isDarkMode)
+            )}>
               Nigeria Tax Reform Assistant
             </h1>
             {variant === 'simple' && (
-              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+              <p className={cn('text-sm', getTextColor(isDarkMode, 'text-gray-500', 'text-gray-400'))}>
                 Powered by FIRS Guidelines
               </p>
             )}
@@ -55,9 +61,7 @@ const Header = ({
             {/* Dark Mode Toggle */}
             <button 
               onClick={onDarkModeToggle}
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-              }`}
+              className={cn('p-2 rounded-lg transition-colors', getHoverBg(isDarkMode))}
               aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
               title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
@@ -82,12 +86,10 @@ const Header = ({
 
             {/* User Profile */}
             <button 
-              className={`p-2 rounded-lg transition-colors ${
-                isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
-              }`}
+              className={cn('p-2 rounded-lg transition-colors', getHoverBg(isDarkMode))}
               aria-label="User profile"
             >
-              <User className={`w-5 h-5 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`} />
+              <User className={cn('w-5 h-5', getTextColor(isDarkMode, 'text-gray-600', 'text-gray-300'))} />
             </button>
           </>
         )}
