@@ -1,4 +1,3 @@
-# ai_engine/__init__.py
 """
 AI Engine for Nigeria Tax Reform Bills Q&A Assistant
 """

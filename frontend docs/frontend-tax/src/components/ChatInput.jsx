@@ -17,7 +17,6 @@ const ChatInput = ({
   );
   const maxChars = 2000;
 
-  // Fetch placeholder from backend on mount
   useEffect(() => {
     const loadPlaceholder = async () => {
       if (!placeholder) {
@@ -64,7 +63,6 @@ const ChatInput = ({
               : "bg-white border border-gray-200"
           }`}
         >
-          {/* Input Area */}
           <div className="relative">
             {variant === "with-attachments" && (
               <button
@@ -99,7 +97,6 @@ const ChatInput = ({
             />
           </div>
 
-          {/* Bottom Bar */}
           <div className="flex items-center justify-between px-6 pb-4 pt-2">
             <div className="flex items-center gap-2">
               {variant === "advanced" && (
@@ -177,7 +174,6 @@ const ChatInput = ({
           </div>
         </form>
 
-        {/* Disclaimer */}
         {variant !== "simple" && (
           <p
             className={`text-xs text-center mt-3 ${

@@ -20,7 +20,6 @@ const ChatView = ({ isDarkMode }) => {
 
   const hasMessages = messages.length > 0;
   
-  // Get sources from the last assistant message (from backend)
   const lastBotMessage = messages.filter(m => !m.isUser).pop();
   const activeSources = lastBotMessage?.sources || [];
 

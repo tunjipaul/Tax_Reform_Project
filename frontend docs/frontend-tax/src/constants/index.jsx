@@ -1,15 +1,12 @@
-// API Configuration from environment variables
 export const API_CONFIG = {
   BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000",
   TIMEOUT: parseInt(import.meta.env.VITE_API_TIMEOUT) || 30000,
   ENABLE_MOCK: import.meta.env.VITE_ENABLE_MOCK_DATA === "True",
 
 
-  MOCK_DELAY: 2000, // ms
+  MOCK_DELAY: 2000,
   MOCK_ERROR_RATE: 0.2, 
 };
-
-// API Endpoints
 
 export const API_ENDPOINTS = {
   CHAT: `${API_CONFIG.BASE_URL}/api/chat`,
@@ -17,16 +14,8 @@ export const API_ENDPOINTS = {
 
 };
 
-// export const API_ENDPOINTS = {
-//   CHAT: `${API_CONFIG.BASE_URL}/api/chat`,
-//   SOURCES: `${API_CONFIG.BASE_URL}/sources`,
-//   HISTORY: `${API_CONFIG.BASE_URL}/history`,
-//   PLACEHOLDER: `${API_CONFIG.BASE_URL}/placeholder`,
-// };
-
-// UI Configuration
 export const UI_CONFIG = {
-  SIDEBAR_WIDTH: 256, // pixels
+  SIDEBAR_WIDTH: 256,
   MAX_MESSAGE_LENGTH: 2000,
   TYPING_INDICATOR_DELAY: 300,
   AUTO_SCROLL_DELAY: 100,
@@ -34,7 +23,6 @@ export const UI_CONFIG = {
   APP_VERSION: import.meta.env.VITE_APP_VERSION || "1.0.0",
 };
 
-// Sample Data
 export const MOCK_RECENT_CHATS = [
   {
     title: "VAT Implications...",
@@ -57,7 +45,7 @@ export const MOCK_USER = {
 export const MOCK_SOURCES = [
   {
     title: "Nigeria Tax Bill 2024",
-    description: "Section 45 • Value Added Tax Adjustments",
+    description: "Section 45 - Value Added Tax Adjustments",
     excerpt:
       "45. (1) Subject to the provisions of subsection (2), a taxable person who has made a taxable supply to a person ... where the taxable person is a small company with a turnover of less than N25,000,000.00, shall be exempt from the requirements of registration and charging of tax...",
     page: 112,
@@ -89,13 +77,11 @@ export const FOLLOWUP_SUGGESTIONS = [
   { text: "When does this take effect?" },
 ];
 
-// Tax Amounts
 export const TAX_THRESHOLDS = {
-  VAT_EXEMPTION: 25000000, // N25 million
+  VAT_EXEMPTION: 25000000,
   SMALL_BUSINESS: 25000000,
 };
 
-// Messages
 export const ERROR_MESSAGES = {
   NETWORK_ERROR:
     "We encountered a network issue while retrieving the latest tax exemption data. Please check your connection and try again.",
@@ -109,6 +95,5 @@ export const SUCCESS_MESSAGES = {
     "Under the 2024 reform, small businesses with a turnover of less than N25 million are exempt from charging VAT. This aims to reduce the compliance burden on SMEs while streamlining revenue collection.\n\nAdditionally, businesses in this category are no longer required to file monthly VAT returns, provided they maintain proper records of their transactions for audit purposes.",
 };
 
-// Default placeholder (fallback if API fails)
 export const DEFAULT_PLACEHOLDER =
   "Ask a question about the 2024 Tax Reform...";

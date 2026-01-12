@@ -9,54 +9,42 @@ from typing import Optional
 from dataclasses import dataclass
 from dotenv import load_dotenv
 
-# Load .env file
 load_dotenv()
 
-# Define Base Directory (Absolute Path to 'ai_engine' folder)
 BASE_DIR = Path(__file__).parent.absolute()
 
 @dataclass
 class Config:
     """Central configuration for AI Engine"""
     
-    # API Configuration
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
     
-    # Model Configuration
     LLM_MODEL: str = "gemini-2.0-flash-exp"
     EMBEDDING_MODEL: str = "text-embedding-004"
     
-    # Generation Parameters
-    TEMPERATURE: float = 0.1  # Low for factual accuracy
+    TEMPERATURE: float = 0.1
     MAX_TOKENS: int = 2048
     TOP_P: float = 0.95
     TOP_K: int = 40
     
-    # Retrieval Configuration
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 200
     RETRIEVAL_TOP_K: int = 5
-    SIMILARITY_THRESHOLD: float = 0.35  # Revised from 0.7
+    SIMILARITY_THRESHOLD: float = 0.35
     
-    # Memory Configuration
-    MAX_CONVERSATION_HISTORY: int = 5  # Last 5 Q&A pairs
-    SESSION_TIMEOUT: int = 3600  # 1 hour in seconds
+    MAX_CONVERSATION_HISTORY: int = 5
+    SESSION_TIMEOUT: int = 3600
     
-    # Vector Store Configuration (Absolute Paths)
-    # This ensures consistent access regardless of execution directory
     VECTOR_STORE_PATH: str = str(BASE_DIR / "chroma_db")
     COLLECTION_NAME: str = "tax_reform_bills"
     
-    # Document Processing (Absolute Paths)
     SUPPORTED_FORMATS: list = None
     DOCS_DIRECTORY: str = str(BASE_DIR / "documents")
     
-    # Performance
     USE_ASYNC: bool = True
     ENABLE_CACHING: bool = True
-    CACHE_TTL: int = 3600  # 1 hour
+    CACHE_TTL: int = 3600
     
-    # Logging
     LOG_LEVEL: str = "INFO"
     LOG_FILE: str = str(BASE_DIR / "ai_engine.log")
     
@@ -64,14 +52,12 @@ class Config:
         if self.SUPPORTED_FORMATS is None:
             self.SUPPORTED_FORMATS = ['.pdf', '.txt', '.md', '.docx']
         
-        # Validate API key
         if not self.GEMINI_API_KEY:
             raise ValueError(
                 "GEMINI_API_KEY not found! "
                 "Set it in your environment or .env file"
             )
         
-        # Create necessary directories
         Path(self.VECTOR_STORE_PATH).mkdir(parents=True, exist_ok=True)
         Path(self.DOCS_DIRECTORY).mkdir(parents=True, exist_ok=True)
     
@@ -84,7 +70,6 @@ class Config:
             EMBEDDING_MODEL=os.getenv("EMBEDDING_MODEL", "text-embedding-004"),
             TEMPERATURE=float(os.getenv("TEMPERATURE", "0.1")),
             CHUNK_SIZE=int(os.getenv("CHUNK_SIZE", "1000")),
-            # Use default absolute path unless explicitly overridden
             VECTOR_STORE_PATH=os.getenv("VECTOR_STORE_PATH", str(BASE_DIR / "chroma_db")),
         )
     
@@ -104,10 +89,8 @@ class Config:
         return True
 
 
-# Singleton instance
-config = Config.from_env()
 
-# System prompts
+config = Config.from_env()
 SYSTEM_PROMPTS = {
     "main": """You are an AI assistant specializing in Nigeria's 2024 Tax Reform Bills.
 
@@ -155,7 +138,7 @@ Format each citation as:
 Ensure citations are accurate and relevant to the answer."""
 }
 
-print("✅ Configuration loaded successfully!")
-print(f"📊 Model: {config.LLM_MODEL}")
-print(f"🗂️ Vector Store: {config.VECTOR_STORE_PATH}")
-print(f"💾 Max History: {config.MAX_CONVERSATION_HISTORY} messages")
+print("Configuration loaded successfully!")
+print(f"Model: {config.LLM_MODEL}")
+print(f"Vector Store: {config.VECTOR_STORE_PATH}")
+print(f"Max History: {config.MAX_CONVERSATION_HISTORY} messages")

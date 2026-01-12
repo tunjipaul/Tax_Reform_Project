@@ -10,15 +10,11 @@ import operator
 from langgraph.graph import StateGraph, END
 from google import genai
 
-# FIX: Use relative imports for intra-package references
 from .config import config, SYSTEM_PROMPTS
 from .vector_store import VectorStore
 from .memory import ConversationMemory
 
 
-# =============================================================================
-# STATE DEFINITION
-# =============================================================================
 
 class AgentState(TypedDict):
     """State passed through LangGraph nodes"""
@@ -32,9 +28,6 @@ class AgentState(TypedDict):
     timestamp: datetime
 
 
-# =============================================================================
-# TAX Q&A AGENT
-# =============================================================================
 
 class TaxQAAgent:
     """
@@ -45,26 +38,24 @@ class TaxQAAgent:
         self.vector_store = vector_store
         self.memory = ConversationMemory()
         
-        # Initialize Gemini client
         self.llm = genai.Client(api_key=config.GEMINI_API_KEY)
         self.model = config.LLM_MODEL
         
-        # Build the graph
         self.graph = self._build_graph()
     
     def _build_graph(self) -> StateGraph:
         """Build LangGraph workflow"""
         workflow = StateGraph(AgentState)
         
-        # Add nodes
+
         workflow.add_node("decide_retrieval", self.decide_retrieval)
         workflow.add_node("retrieve_documents", self.retrieve_documents)
         workflow.add_node("generate_response", self.generate_response)
         
-        # Define edges
+
         workflow.set_entry_point("decide_retrieval")
         
-        # Conditional routing based on should_retrieve
+
         workflow.add_conditional_edges(
             "decide_retrieval",
             self.route_after_decision,
@@ -79,10 +70,6 @@ class TaxQAAgent:
         
         return workflow.compile()
     
-    # =========================================================================
-    # NODE 1: DECIDE IF RETRIEVAL IS NEEDED
-    # =========================================================================
-    
     def decide_retrieval(self, state: AgentState) -> AgentState:
         """
         Decide if we need to retrieve documents
@@ -90,7 +77,7 @@ class TaxQAAgent:
         user_message = state["user_message"].lower().strip()
         conversation_history = state["conversation_history"]
         
-        # Simple rule-based for greetings
+
         greetings = ["hello", "hi", "hey", "good morning", "good afternoon"]
         thanks = ["thank", "thanks", "appreciate"]
         
@@ -98,7 +85,6 @@ class TaxQAAgent:
             state["should_retrieve"] = False
             return state
         
-        # Use LLM for more complex decisions
         decision_prompt = f"""
 {SYSTEM_PROMPTS['retrieval_decision']}
 
@@ -123,7 +109,7 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             state["should_retrieve"] = "RETRIEVE" in decision
             
         except Exception as e:
-            print(f"⚠️ Decision error: {e}. Defaulting to RETRIEVE")
+            print(f"Decision error: {e}. Defaulting to RETRIEVE")
             state["should_retrieve"] = True
         
         return state
@@ -132,47 +118,29 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
         """Route based on retrieval decision"""
         return "retrieve" if state["should_retrieve"] else "generate"
     
-    # =========================================================================
-    # NODE 2: RETRIEVE DOCUMENTS
-    # =========================================================================
-    
     def retrieve_documents(self, state: AgentState) -> AgentState:
         """Retrieve relevant documents from vector store"""
         query = state["user_message"]
         
-        print(f"🔍 Retrieving documents for: '{query}'")
+        print(f"Retrieving documents for: '{query}'")
         
-        # Search vector store
         documents = self.vector_store.similarity_search(
             query=query,
             k=config.RETRIEVAL_TOP_K
         )
         
-        # FALLBACK: If query is very broad (like "overview" or "breakdown"), 
-        # specific chunk similarity might be low. 
-        # If no docs found, try a broader keyword search or just get generic top k
-        # without threshold (or lower threshold).
-        
         if not documents:
-            print("⚠️ No documents found with high similarity. Attempting broad search...")
-            # Retry with a dummy query to fetch general context if the user asked for an "overview"
-            # Or simply relax the threshold in the vector store logic (not easily done dynamically here without changing method signature)
-            # For now, we will return empty list, but we HANDLE it in the next node.
+            print("No documents found with high similarity. Attempting broad search...")
             state["retrieved_documents"] = []
         else:
-            print(f"📄 Retrieved {len(documents)} documents")
+            print(f"Retrieved {len(documents)} documents")
             state["retrieved_documents"] = documents
         
         return state
     
-    # =========================================================================
-    # NODE 3: GENERATE RESPONSE
-    # =========================================================================
-    
     def generate_response(self, state: AgentState) -> AgentState:
         """Generate response using LLM"""
         
-        # CHECK: If retrieval was required but no docs found, ABORT GENERATION
         if state["should_retrieve"] and not state.get("retrieved_documents"):
             state["generated_response"] = (
                 "I apologize, but I couldn't find specific sections in the official Tax Reform Bills "
@@ -183,10 +151,8 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             state["sources"] = []
             return state
 
-        # Build context
         context = self._build_context(state)
         
-        # Generate response
         try:
             response = self.llm.models.generate_content(
                 model=self.model,
@@ -200,45 +166,37 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             
             generated_text = response.text
             
-            # Extract citations
             docs = state.get("retrieved_documents") or []
             sources = self._extract_sources(docs)
             
             state["generated_response"] = generated_text
             state["sources"] = sources
             
-            print("✅ Response generated successfully")
+            print("Response generated successfully")
             
         except Exception as e:
-            print(f"❌ Generation error: {e}")
+            print(f"Generation error: {e}")
             state["generated_response"] = "Sorry, I encountered an error generating a response."
             state["sources"] = []
         
         return state
     
-    # =========================================================================
-    # HELPER METHODS
-    # =========================================================================
-    
     def _build_context(self, state: AgentState) -> str:
         """Build context for LLM"""
         parts = [SYSTEM_PROMPTS["main"]]
         
-        # Add conversation history
         if state.get("conversation_history"):
             parts.append("\nConversation History:")
             parts.append(self._format_history(state["conversation_history"]))
         
-        # Add retrieved documents
         if state.get("retrieved_documents"):
             parts.append("\nRelevant Information from Documents:")
             for i, doc in enumerate(state["retrieved_documents"], 1):
                 parts.append(f"\n[Document {i}]")
                 parts.append(f"Source: {doc['metadata'].get('source', 'Unknown')}")
-                parts.append(f"Content: {doc['content'][:1500]}...") 
+                parts.append(f"Content: {doc['content'][:1500]}...")
                 parts.append(f"Relevance Score: {doc['score']:.2f}")
         
-        # Add current question
         parts.append(f"\nCurrent Question: {state['user_message']}")
         parts.append("\nYour Response (with citations):")
         
@@ -271,10 +229,6 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
         
         return sources
     
-    # =========================================================================
-    # PUBLIC METHODS
-    # =========================================================================
-    
     def chat(
         self,
         message: str,
@@ -282,7 +236,6 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
         conversation_history: Optional[List[Dict]] = None
     ) -> Dict:
         """Main chat interface"""
-        # Initialize state
         initial_state = AgentState(
             session_id=session_id,
             user_message=message,
@@ -294,11 +247,9 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             timestamp=datetime.now()
         )
         
-        # Run through graph
-        print(f"\n🤖 Processing: '{message}'")
+        print(f"\nProcessing: '{message}'")
         final_state = self.graph.invoke(initial_state)
         
-        # Update memory
         self.memory.add_message(
             session_id=session_id,
             role="user",
@@ -311,7 +262,6 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
             content=final_state["generated_response"]
         )
         
-        # Return response
         return {
             "session_id": session_id,
             "response": final_state["generated_response"],
@@ -332,5 +282,5 @@ Decision (RETRIEVE or NO_RETRIEVE):"""
 def create_agent(vector_store: VectorStore) -> TaxQAAgent:
     """Create and return initialized agent"""
     agent = TaxQAAgent(vector_store)
-    print("✅ Tax Q&A Agent initialized")
+    print("Tax Q&A Agent initialized")
     return agent

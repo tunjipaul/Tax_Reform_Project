@@ -37,7 +37,7 @@ const Sidebar = ({
       onNewChat();
     }
     if (onClose) {
-      onClose(); // Close mobile menu after action
+      onClose();
     }
   };
 
@@ -46,11 +46,10 @@ const Sidebar = ({
       onChatSelect(chat);
     }
     if (onClose) {
-      onClose(); // Close mobile menu after action
+      onClose();
     }
   };
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -64,7 +63,6 @@ const Sidebar = ({
 
   return (
     <>
-      {/* Mobile Overlay */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
@@ -73,7 +71,6 @@ const Sidebar = ({
         />
       )}
 
-      {/* Sidebar */}
       <div className={`
         ${getSidebarStyles()}
         flex flex-col h-screen w-64
@@ -81,7 +78,6 @@ const Sidebar = ({
         transform transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
-        {/* Mobile Close Button */}
         <div className="md:hidden flex justify-end p-4">
           <button
             onClick={onClose}
@@ -94,7 +90,6 @@ const Sidebar = ({
           </button>
         </div>
 
-        {/* Header */}
         <div className="p-4">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -110,7 +105,6 @@ const Sidebar = ({
             </div>
           </div>
 
-          {/* New Chat Button */}
           <button
             onClick={handleNewChatClick}
             className="w-full py-3 px-4 bg-green-600 text-white rounded-lg flex items-center gap-2 font-medium transition-colors hover:bg-green-700"
@@ -120,7 +114,6 @@ const Sidebar = ({
           </button>
         </div>
 
-        {/* Recent Chats / Menu */}
         <div className="flex-1 overflow-y-auto px-4">
           {recentChats.length > 0 && (
             <div className="mb-6">
@@ -153,7 +146,6 @@ const Sidebar = ({
             </div>
           )}
 
-          {/* Menu Items */}
           <div className="space-y-1 mb-6">
             <h3 className={`text-xs font-semibold uppercase mb-3 ${
               isDarkMode ? 'text-gray-400' : 'text-gray-500'
@@ -176,7 +168,6 @@ const Sidebar = ({
           </div>
         </div>
 
-        {/* User Profile / Upgrade */}
         <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
           {currentUser ? (
             <div className="flex items-center gap-3">

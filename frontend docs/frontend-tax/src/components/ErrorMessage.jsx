@@ -7,7 +7,7 @@ const ErrorMessage = ({
 }) => {
   return (
     <div className="flex gap-3 mb-6">
-      <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+      <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center shrink-0">
         <Bot className="w-6 h-6 text-white" />
       </div>
 
@@ -27,7 +27,7 @@ const ErrorMessage = ({
           isDarkMode ? 'bg-red-900/20' : 'bg-red-50'
         }`}>
           <div className="flex items-start gap-2">
-            <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className={`font-semibold mb-1 ${
                 isDarkMode ? 'text-red-400' : 'text-red-900'

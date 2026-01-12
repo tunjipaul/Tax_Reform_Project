@@ -12,15 +12,14 @@ and it will work immediately.
 **To:** Frontend Team  
 **From:** Samuel (AI Engineer)
 
-The AI Backend is ready 🎉  
+The AI Backend is ready
 This document explains how to connect your **React frontend** to the **Q&A Engine**.
 
 ---
 
-## 📡 API Base URL
+## API Base URL
 
 ### Local Development
-
 ```
 
 [http://localhost:8000](http://localhost:8000)
@@ -29,7 +28,7 @@ This document explains how to connect your **React frontend** to the **Q&A Engin
 
 ---
 
-## 1️⃣ Chat Endpoint
+## 1. Chat Endpoint
 
 ### POST `/api/chat`
 
@@ -49,18 +48,18 @@ Use this endpoint to send user messages and receive AI-generated answers **with 
 
 #### Field Descriptions
 
-* **session_id**
+- **session_id**
 
-  * Generate a UUID when the frontend loads
-  * Used to maintain conversation context
+  - Generate a UUID when the frontend loads
+  - Used to maintain conversation context
 
-* **message**
+- **message**
 
-  * The user's current question
+  - The user's current question
 
-* **history** (optional)
+- **history** (optional)
 
-  * Array of previous messages if you want to manage history client-side
+  - Array of previous messages if you want to manage history client-side
 
 ---
 
@@ -85,26 +84,26 @@ Use this endpoint to send user messages and receive AI-generated answers **with 
 
 #### Response Fields
 
-* **response**
+- **response**
 
-  * The AI-generated answer
+  - The AI-generated answer
 
-* **sources**
+- **sources**
 
-  * List of documents used to generate the response
-  * Empty array if no relevant sources were found
+  - List of documents used to generate the response
+  - Empty array if no relevant sources were found
 
-* **retrieved**
+- **retrieved**
 
-  * `true` if document retrieval was used
+  - `true` if document retrieval was used
 
-* **timestamp**
+- **timestamp**
 
-  * ISO 8601 formatted response time
+  - ISO 8601 formatted response time
 
 ---
 
-## 2️⃣ Health Check
+## 2. Health Check
 
 ### GET `/health`
 
@@ -123,28 +122,28 @@ Use this endpoint for your **System Status** indicator.
 
 ---
 
-## 🎨 UI Recommendations
+## UI Recommendations
 
-### 📚 Citations
+### Citations
 
-* When `sources` is **not empty**, display them below the AI response
-* Suggested UI patterns:
+- When `sources` is **not empty**, display them below the AI response
+- Suggested UI patterns:
 
-  * Small source cards
-  * Or a **“View Sources”** dropdown
-
----
-
-### ⏳ Loading State
-
-* AI response time: **2–4 seconds**
-* Recommended loading message:
-
-  > *"Searching tax documents..."*
+  - Small source cards
+  - Or a **“View Sources”** dropdown
 
 ---
 
-### ⚠️ Disclaimer
+### Loading State
+
+- AI response time: **2–4 seconds**
+- Recommended loading message:
+
+  > _"Searching tax documents..."_
+
+---
+
+### Disclaimer
 
 Always show this footer message in the UI:
 
@@ -152,7 +151,7 @@ Always show this footer message in the UI:
 
 ---
 
-## 🏃‍♂️ Running the Backend (Local Testing)
+## Running the Backend (Local Testing)
 
 1. Navigate to the project root
 2. Run the command:
@@ -169,12 +168,11 @@ http://localhost:8000
 
 ---
 
-## ✅ Notes for Frontend Integration
+## Notes for Frontend Integration
 
-* Handle empty `sources` gracefully
-* Persist `session_id` for the duration of a user session
-* Expect non-instant responses (do not block UI)
-* Treat AI responses as **assistive**, not authoritative
+- Handle empty `sources` gracefully
+- Persist `session_id` for the duration of a user session
+- Expect non-instant responses (do not block UI)
+- Treat AI responses as **assistive**, not authoritative
 
 ---
-

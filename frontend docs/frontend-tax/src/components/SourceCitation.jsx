@@ -15,23 +15,18 @@ const SourceCitation = ({ sources = [], isDarkMode = false }) => {
 
   if (!sources || sources.length === 0) return null;
 
-  // Helper to format source type for display
   const formatType = (type) => {
     if (!type) return 'Document';
     return type.toUpperCase();
   };
 
-  // Helper to format relevance score
   const formatScore = (score) => {
     if (!score && score !== 0) return null;
     return `${Math.round(score * 100)}% relevant`;
   };
 
-  // Generate a link to the document (served from backend/public)
   const getDocumentLink = (documentName) => {
     if (!documentName) return null;
-    // Clean the document name and create a link
-    // Documents are in ai_engine/documents/ folder
     const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
     const encodedName = encodeURIComponent(documentName);
     return `${baseUrl}/documents/${encodedName}`;
@@ -39,7 +34,6 @@ const SourceCitation = ({ sources = [], isDarkMode = false }) => {
 
   return (
     <div className={`mt-6 pt-6 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-      {/* Collapsible Header */}
       <button 
         onClick={toggleSection}
         className={`w-full flex items-center justify-between gap-2 p-3 rounded-lg transition-colors ${
@@ -72,12 +66,10 @@ const SourceCitation = ({ sources = [], isDarkMode = false }) => {
         </div>
       </button>
 
-      {/* Expandable Content */}
       {isOpen && (
         <div className="mt-3 space-y-3">
           {sources.map((source, index) => {
             const isExpanded = expandedSource === index;
-            // Support both new format (document) and old format (title)
             const documentName = source.document || source.title || 'Unknown Document';
             const description = source.description || formatType(source.type);
             const relevanceScore = formatScore(source.score);
@@ -113,7 +105,7 @@ const SourceCitation = ({ sources = [], isDarkMode = false }) => {
                           {description}
                           {relevanceScore && (
                             <span className="ml-2 text-xs text-green-600 font-medium">
-                              • {relevanceScore}
+                              - {relevanceScore}
                             </span>
                           )}
                         </p>

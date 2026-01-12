@@ -5,7 +5,6 @@ import {
   DEFAULT_PLACEHOLDER,
 } from "../constants";
 
-// Generate a unique session ID for conversation tracking
 export const generateSessionId = () => {
   return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
@@ -129,7 +128,6 @@ export const fetchChatHistory = async (userId) => {
   }
 };
 
-// Fetch all sessions for sidebar history
 export const fetchSessions = async () => {
   try {
     const response = await fetchWithTimeout(
@@ -156,7 +154,6 @@ export const fetchSessions = async () => {
   }
 };
 
-// Load a specific session's messages
 export const loadSession = async (sessionId) => {
   try {
     const response = await fetchWithTimeout(

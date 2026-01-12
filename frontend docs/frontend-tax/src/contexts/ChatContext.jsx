@@ -25,7 +25,6 @@ export const ChatProvider = ({ children }) => {
     handleSendMessage(suggestion.text);
   }, [handleSendMessage]);
 
-  // Load a previous session's messages
   const handleLoadSession = useCallback((messages) => {
     setShowWelcome(false);
     chat.loadMessages(messages);

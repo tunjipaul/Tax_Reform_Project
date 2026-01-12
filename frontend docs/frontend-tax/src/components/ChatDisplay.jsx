@@ -14,7 +14,6 @@ const ChatDisplay = ({ messages, isLoading, isDarkMode = false }) => {
 
   return (
     <div className="space-y-6">
-      {/* Timestamp */}
       <div className="text-center">
         <span className={`text-xs px-3 py-1 rounded-full ${
           isDarkMode 
@@ -25,7 +24,6 @@ const ChatDisplay = ({ messages, isLoading, isDarkMode = false }) => {
         </span>
       </div>
 
-      {/* Empty State */}
       {messages.length === 0 && !isLoading && (
         <div className="flex flex-col items-center justify-center py-20">
           <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-4 ${
@@ -46,11 +44,10 @@ const ChatDisplay = ({ messages, isLoading, isDarkMode = false }) => {
         </div>
       )}
 
-      {/* Messages */}
       {messages.map((msg, index) => (
         <div key={index} className={`flex gap-3 ${msg.isUser ? 'justify-end' : 'justify-start'}`}>
           {!msg.isUser && (
-            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center shrink-0">
               <Bot className="w-6 h-6 text-white" />
             </div>
           )}
@@ -156,7 +153,7 @@ const ChatDisplay = ({ messages, isLoading, isDarkMode = false }) => {
           </div>
 
           {msg.isUser && (
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
               isDarkMode ? 'bg-gray-700' : 'bg-gray-300'
             }`}>
               <User className={`w-6 h-6 ${

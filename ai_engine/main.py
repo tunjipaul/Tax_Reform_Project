@@ -22,35 +22,35 @@ def initialize_system(reset_db: bool = False):
     logger.info("INITIALIZING AI ENGINE")
     logger.info("="*60)
     
-    logger.info("\n📚 Step 1: Loading documents...")
+    logger.info("\nStep 1: Loading documents...")
     with Timer() as t:
         chunks = load_and_chunk_documents()
     
     if not chunks:
-        logger.error("❌ No documents found! Add PDFs to ./documents/")
+        logger.error("No documents found! Add PDFs to ./documents/")
         sys.exit(1)
     
-    logger.info(f"✅ Loaded {len(chunks)} chunks in {t.elapsed():.2f}s")
+    logger.info(f"Loaded {len(chunks)} chunks in {t.elapsed():.2f}s")
     
-    logger.info("\n🗄️ Step 2: Initializing vector store...")
+    logger.info("\nStep 2: Initializing vector store...")
     with Timer() as t:
         store = initialize_vector_store(chunks, reset=reset_db)
     
-    logger.info(f"✅ Vector store ready in {t.elapsed():.2f}s")
+    logger.info(f"Vector store ready in {t.elapsed():.2f}s")
     
-    logger.info("\n🤖 Step 3: Creating AI agent...")
+    logger.info("\nStep 3: Creating AI agent...")
     with Timer() as t:
         agent = create_agent(store)
     
-    logger.info(f"✅ Agent created in {t.elapsed():.2f}s")
+    logger.info(f"Agent created in {t.elapsed():.2f}s")
     
     stats = store.get_collection_stats()
-    logger.info("\n📊 System Statistics:")
+    logger.info("\nSystem Statistics:")
     logger.info(f"   Documents: {stats['total_documents']}")
     logger.info(f"   Model: {config.LLM_MODEL}")
     logger.info(f"   Embeddings: {config.EMBEDDING_MODEL}")
     
-    logger.info("\n✅ SYSTEM READY!")
+    logger.info("\nSYSTEM READY!")
     logger.info("="*60 + "\n")
     
     return agent, store
@@ -80,15 +80,15 @@ def demo_conversation(agent: TaxQAAgent):
         with Timer() as t:
             response = agent.chat(query, session_id)
         
-        print(f"\n🤖 Assistant:")
+        print(f"\nAssistant:")
         print(response['response'])
         
         if response.get('sources'):
-            print(f"\n📚 Sources ({len(response['sources'])}):")
+            print(f"\nSources ({len(response['sources'])}):")
             for j, source in enumerate(response['sources'][:2], 1):
                 print(f"   {j}. {source['document']}")
         
-        print(f"\n⏱️ Response time: {t.elapsed():.2f}s")
+        print(f"\nResponse time: {t.elapsed():.2f}s")
 
 
 def interactive_mode(agent: TaxQAAgent):
@@ -104,61 +104,57 @@ def interactive_mode(agent: TaxQAAgent):
     
     while True:
         try:
-            query = input("\n💬 You: ").strip()
+            query = input("\nYou: ").strip()
             
             if not query:
                 continue
             
             if query.lower() in ['quit', 'exit']:
-                print("\n👋 Goodbye!")
+                print("\nGoodbye!")
                 break
             
             if query.lower() == 'clear':
                 agent.clear_session(session_id)
-                print("✅ Session cleared!")
+                print("Session cleared!")
                 continue
             
             with Timer() as t:
                 response = agent.chat(query, session_id)
             
-            print(f"\n🤖 Assistant: {response['response']}")
+            print(f"\nAssistant: {response['response']}")
             
             if response.get('sources'):
-                print(f"\n📚 Sources:")
+                print(f"\nSources:")
                 for source in response['sources'][:2]:
-                    print(f"   • {source['document']}")
+                    print(f"   . {source['document']}")
             
-            print(f"\n⏱️ {t.elapsed():.2f}s")
+            print(f"\n{t.elapsed():.2f}s")
         
         except KeyboardInterrupt:
-            print("\n\n👋 Goodbye!")
+            print("\n\nGoodbye!")
             break
         except Exception as e:
             logger.error(f"Error: {e}")
-            print(f"\n❌ Error: {e}")
+            print(f"\nError: {e}")
 
 
 def main():
     """Main function"""
-    print("""
-    ╔══════════════════════════════════════════════════════════╗
-    ║                                                          ║
-    ║        NIGERIA TAX REFORM BILLS Q&A ASSISTANT            ║
-    ║              AI Engine - Samuel Dasaolu                  ║
-    ║                                                          ║
-    ╚══════════════════════════════════════════════════════════╝
-    """)
+    print("-" * 60)
+    print("        NIGERIA TAX REFORM BILLS Q&A ASSISTANT")
+    print("              AI Engine - Samuel Dasaolu")
+    print("-" * 60)
     
     docs_path = Path(config.DOCS_DIRECTORY)
     if not docs_path.exists() or not list(docs_path.rglob("*.pdf")):
-        print("⚠️  WARNING: No documents found!")
+        print("WARNING: No documents found!")
         print(f"   Add PDFs to: {config.DOCS_DIRECTORY}\n")
     
     try:
         agent, store = initialize_system(reset_db=False)
     except Exception as e:
         logger.error(f"Failed to initialize system: {e}")
-        print(f"\n❌ Initialization failed: {e}")
+        print(f"\nInitialization failed: {e}")
         sys.exit(1)
     
     print("\nChoose mode:")
@@ -173,7 +169,7 @@ def main():
     elif choice == "2":
         interactive_mode(agent)
     else:
-        print("👋 Goodbye!")
+        print("Goodbye!")
     
     print("\n" + "="*60)
     print("Thank you for using the Tax Reform Q&A Assistant!")

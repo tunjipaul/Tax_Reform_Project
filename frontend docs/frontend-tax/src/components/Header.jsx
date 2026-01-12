@@ -9,7 +9,6 @@ const Header = ({
   isDarkMode = false,
   onMenuToggle
 }) => {
-  // Variant styles with dark mode support
   const getHeaderStyles = () => {
     if (variant === 'primary') return 'bg-green-700 text-white';
     return cn(
@@ -22,7 +21,6 @@ const Header = ({
   return (
     <header className={cn('px-4 sm:px-6 py-4 flex items-center justify-between', getHeaderStyles())}>
       <div className="flex items-center gap-3">
-        {/* Mobile Hamburger Menu */}
         <button
           onClick={onMenuToggle}
           className={cn('md:hidden p-2 rounded-lg transition-colors', getHoverBg(isDarkMode))}
@@ -31,7 +29,6 @@ const Header = ({
           <Menu className={cn('w-6 h-6', getTextColor(isDarkMode, 'text-gray-600', 'text-gray-300'))} />
         </button>
 
-        {/* Logo and Title */}
         <div className="flex items-center gap-3">
           <div className={cn(
             'w-10 h-10 rounded-lg flex items-center justify-center',
@@ -58,7 +55,6 @@ const Header = ({
       <div className="flex items-center gap-2 sm:gap-3">
         {variant === 'default' && (
           <>
-            {/* Dark Mode Toggle */}
             <button 
               onClick={onDarkModeToggle}
               className={cn('p-2 rounded-lg transition-colors', getHoverBg(isDarkMode))}
@@ -72,7 +68,6 @@ const Header = ({
               )}
             </button>
 
-            {/* New Chat Hidden on small mobile */}
             {showNewChat && (
               <button 
                 onClick={onNewChat}
@@ -84,7 +79,6 @@ const Header = ({
               </button>
             )}
 
-            {/* User Profile */}
             <button 
               className={cn('p-2 rounded-lg transition-colors', getHoverBg(isDarkMode))}
               aria-label="User profile"

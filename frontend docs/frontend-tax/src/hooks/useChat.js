@@ -8,7 +8,6 @@ export const useChat = () => {
   const [error, setError] = useState(null);
   const [showSources, setShowSources] = useState(false);
   
-  // Session ID as ref so it can be regenerated on new chat
   const sessionIdRef = useRef(generateSessionId());
   
   const pendingTimeoutRef = useRef(null);
@@ -25,7 +24,6 @@ export const useChat = () => {
     };
   }, []);
 
-  // Build history from messages for API
   const buildHistory = useCallback(() => {
     return messages.map(msg => ({
       role: msg.isUser ? 'user' : 'assistant',
@@ -79,7 +77,6 @@ export const useChat = () => {
       } else {
         abortControllerRef.current = new AbortController();
 
-        // Build history from previous messages
         const history = buildHistory();
 
         const result = await sendChatMessage(
@@ -134,7 +131,6 @@ export const useChat = () => {
     setMessages([]);
     setError(null);
     setShowSources(false);
-    // Generate new session ID for new chat
     sessionIdRef.current = generateSessionId();
   }, []);
 
@@ -148,7 +144,6 @@ export const useChat = () => {
     setIsLoading(false);
   }, []);
 
-  // Load messages from a previous session
   const loadMessages = useCallback((newMessages) => {
     setMessages(newMessages);
     setError(null);

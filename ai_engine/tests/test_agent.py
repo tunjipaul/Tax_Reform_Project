@@ -15,16 +15,12 @@ from document_processor import DocumentChunk
 from memory import ConversationMemory
 
 
-# =============================================================================
-# FIXTURES
-# =============================================================================
-
 @pytest.fixture
 def sample_chunks() -> List[DocumentChunk]:
     """Create sample document chunks for testing"""
     return [
         DocumentChunk(
-            content="Income tax rates have been revised. Individuals earning below ₦800,000 are exempt from personal income tax.",
+            content="Income tax rates have been revised. Individuals earning below N800,000 are exempt from personal income tax.",
             metadata={
                 "source": "Nigeria Tax Bill 2024",
                 "section": "Section 12",
@@ -33,7 +29,7 @@ def sample_chunks() -> List[DocumentChunk]:
             chunk_id="test_chunk_1"
         ),
         DocumentChunk(
-            content="Small businesses with annual turnover below ₦50 million are exempt from company income tax.",
+            content="Small businesses with annual turnover below N50 million are exempt from company income tax.",
             metadata={
                 "source": "Nigeria Tax Bill 2024",
                 "section": "Section 45",
@@ -67,10 +63,6 @@ def agent(vector_store) -> TaxQAAgent:
     """Create agent instance"""
     return create_agent(vector_store)
 
-
-# =============================================================================
-# TEST CASES
-# =============================================================================
 
 class TestGreetingHandling:
     """Test that greetings don't trigger retrieval"""
@@ -142,21 +134,18 @@ class TestConversationMemory:
         """Follow-up questions should use conversation history"""
         session_id = "test_memory"
         
-        # First question
         response1 = agent.chat(
             "What is the income tax threshold?",
             session_id
         )
         
-        # Follow-up
         response2 = agent.chat(
             "What if I earn more than that?",
             session_id
         )
         
-        # Check history was maintained
         history = agent.get_conversation_history(session_id)
-        assert len(history) >= 4  # 2 Q&A pairs
+        assert len(history) >= 4
     
     def test_memory_persistence(self, agent):
         """Memory should persist across multiple messages"""
@@ -172,7 +161,7 @@ class TestConversationMemory:
             agent.chat(msg, session_id)
         
         history = agent.get_conversation_history(session_id)
-        assert len(history) == len(messages) * 2  # Each Q&A = 2 messages
+        assert len(history) == len(messages) * 2
 
 
 class TestCitations:
@@ -188,7 +177,6 @@ class TestCitations:
         if response["retrieved"]:
             assert len(response["sources"]) > 0
             
-            # Check source structure
             source = response["sources"][0]
             assert "document" in source
             assert "excerpt" in source
@@ -225,7 +213,6 @@ class TestResponseQuality:
         )
         
         if response["retrieved"]:
-            # Should mention ₦800,000 (from sample data)
             assert "800" in response["response"] or "exempt" in response["response"].lower()
     
     def test_response_time(self, agent):
@@ -239,7 +226,6 @@ class TestResponseQuality:
         
         elapsed = time.time() - start
         
-        # Should respond within 5 seconds (generous for testing)
         assert elapsed < 5.0, f"Response took {elapsed:.2f} seconds"
 
 
@@ -287,10 +273,6 @@ class TestSessionManagement:
         assert len(history) == 0
 
 
-# =============================================================================
-# TEST QUERY SUITE (for manual testing)
-# =============================================================================
-
 TEST_QUERIES = {
     "greetings": [
         "Hello",
@@ -316,7 +298,7 @@ TEST_QUERIES = {
         "",
         "aksdjfhaksjdfh",
         "Tax? Tax! TAX!!!",
-        "What if I earn ₦1,000,000?"
+        "What if I earn N1,000,000?"
     ]
 }
 
@@ -328,26 +310,22 @@ def run_manual_tests(agent: TaxQAAgent):
     print("="*60 + "\n")
     
     for category, queries in TEST_QUERIES.items():
-        print(f"\n📋 Testing: {category.upper()}")
+        print(f"\nTesting: {category.upper()}")
         print("-" * 60)
         
         for query in queries:
-            print(f"\n❓ Query: {query}")
+            print(f"\nQuery: {query}")
             
             try:
                 response = agent.chat(query, f"manual_test_{category}")
                 
-                print(f"✅ Response: {response['response'][:150]}...")
-                print(f"📊 Retrieved: {response['retrieved']}")
-                print(f"📄 Sources: {len(response.get('sources', []))}")
+                print(f"Response: {response['response'][:150]}...")
+                print(f"Retrieved: {response['retrieved']}")
+                print(f"Sources: {len(response.get('sources', []))}")
                 
             except Exception as e:
-                print(f"❌ Error: {e}")
+                print(f"Error: {e}")
 
-
-# =============================================================================
-# PERFORMANCE BENCHMARKS
-# =============================================================================
 
 def benchmark_agent(agent: TaxQAAgent, num_queries: int = 10):
     """Benchmark agent performance"""
@@ -371,19 +349,17 @@ def benchmark_agent(agent: TaxQAAgent, num_queries: int = 10):
         elapsed = time.time() - start
         times.append(elapsed)
     
-    print(f"📊 Queries processed: {len(times)}")
-    print(f"⚡ Average time: {statistics.mean(times):.2f}s")
-    print(f"🏃 Fastest: {min(times):.2f}s")
-    print(f"🐌 Slowest: {max(times):.2f}s")
-    print(f"📈 Median: {statistics.median(times):.2f}s")
+    print(f"Queries processed: {len(times)}")
+    print(f"Average time: {statistics.mean(times):.2f}s")
+    print(f"Fastest: {min(times):.2f}s")
+    print(f"Slowest: {max(times):.2f}s")
+    print(f"Median: {statistics.median(times):.2f}s")
 
 
 if __name__ == "__main__":
-    # Run pytest
     pytest.main([__file__, "-v"])
     
-    # Run manual tests
-    print("\n\n🧪 Running manual tests...")
+    print("\n\nRunning manual tests...")
     from document_processor import load_and_chunk_documents
     
     chunks = load_and_chunk_documents()
@@ -397,4 +373,4 @@ if __name__ == "__main__":
         run_manual_tests(test_agent)
         benchmark_agent(test_agent)
     else:
-        print("❌ No documents to test with!")
+        print("No documents to test with!")
