@@ -25,6 +25,3 @@ dist-ssr
 .env.production
 .env.example
 .env
-
-#firebase
-firebase.json
