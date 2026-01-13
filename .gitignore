@@ -3,5 +3,3 @@
 .env
 chroma_db/
 __pycache__/
-chroma_db/
-OLD/
