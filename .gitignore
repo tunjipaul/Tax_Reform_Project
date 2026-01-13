@@ -1,7 +1,5 @@
 .venv/
 .idx/
 .env
-ai_engine.log
-__pycache__/
 chroma_db/
-OLD/
+__pycache__/
