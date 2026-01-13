@@ -2,3 +2,5 @@
 .venv/
 .idx/
 __pycache__/
+benv/
+chroma_db/
