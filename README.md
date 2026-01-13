@@ -1,4 +1,5 @@
-# 🇳🇬 Nigeria Tax Reform Bills Q&A Assistant  
+# Nigeria Tax Reform Bills Q&A Assistant
+
 ### Backend & AI Engine
 
 **Project:** Agentic RAG Capstone  
@@ -7,23 +8,23 @@
 
 ---
 
-## 📋 Overview
+## Overview
 
 This repository contains the complete server-side infrastructure for the **Nigeria Tax Reform Q&A Assistant**.  
 It combines a state-of-the-art **Agentic AI Engine** (built with **LangGraph** and **Google Gemini**) with a robust **FastAPI** backend to serve intelligent, citation-backed answers to frontend clients.
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
-### 🧠 AI Engine
+### AI Engine
 
 - **Agentic Workflow** – Intelligent decision-making on when to retrieve documents versus when to respond conversationally.
 - **Conditional Retrieval** – Reduces latency and cost by querying the vector database only for policy-related questions.
 - **Citation-Backed Answers** – All policy claims are grounded in official **2024 Nigeria Tax Reform Bills**.
 - **Conversation Memory** – Maintains multi-turn context (e.g., “What about VAT?” following “Will I pay more tax?”).
 
-### 🚀 Backend API
+### Backend API
 
 - **FastAPI Implementation** – High-performance, asynchronous REST API.
 - **Auto-Healing Data Layer** – Detects empty vector databases and automatically triggers document ingestion on startup.
@@ -32,21 +33,21 @@ It combines a state-of-the-art **Agentic AI Engine** (built with **LangGraph** a
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TD
     User[Frontend / User] -->|POST /api/chat| API[FastAPI Backend]
     API -->|Manage Session| Memory[Conversation Memory]
     API -->|Query| Agent[LangGraph Agent]
-    
+
     subgraph "AI Engine"
         Agent -->|1. Classify Intent| Router{Need Docs?}
         Router -->|No| Chat[General Chat Model]
         Router -->|Yes| Retriever[ChromaDB Retriever]
         Retriever -->|Fetch Context| Generator[Gemini 2.0 Flash]
     end
-    
+
     Generator -->|Response + Citations| API
     Chat -->|Response| API
     API -->|JSON Response| User
@@ -54,7 +55,7 @@ graph TD
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 .
@@ -77,7 +78,7 @@ graph TD
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Prerequisites
 
@@ -120,6 +121,7 @@ CHUNK_OVERLAP=200
 ## 4. Data Setup (Auto‑Ingestion)
 
 1. Place all PDF documents inside:
+
    ```
    ai_engine/documents/
    ```
@@ -130,13 +132,14 @@ CHUNK_OVERLAP=200
    - Chunk, embed, and store them in `ai_engine/chroma_db/`.
 
 **Manual ingestion (fallback):**
+
 ```bash
 python -m ai_engine.vector_store
 ```
 
 ---
 
-## ⚡ Running the Server
+## Running the Server
 
 Start the application from the project root:
 
@@ -149,7 +152,7 @@ python -m backend.main
 
 ---
 
-## 📡 API Documentation
+## API Documentation
 
 ### 1. Chat Endpoint
 
@@ -158,6 +161,7 @@ python -m backend.main
 Handles user interaction with the AI agent.
 
 **Request**
+
 ```json
 {
   "session_id": "unique_user_id",
@@ -167,6 +171,7 @@ Handles user interaction with the AI agent.
 ```
 
 **Response**
+
 ```json
 {
   "session_id": "unique_user_id",
@@ -199,7 +204,7 @@ Handles user interaction with the AI agent.
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Test AI Engine Independently
 
@@ -219,10 +224,10 @@ python debug_retrieval.py
 
 ---
 
-## 👥 Contributors
+## Contributors
 
 **Samuel Dasaolu** – AI Engineer  
-*Agent Logic, RAG Pipeline, API Integration, System Architecture*
+_Agent Logic, RAG Pipeline, API Integration, System Architecture_
 
 ---
 
