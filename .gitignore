@@ -1,6 +1,7 @@
-.env
 .venv/
 .idx/
+.env
+chroma_db/
 __pycache__/
 benv/
 chroma_db/
