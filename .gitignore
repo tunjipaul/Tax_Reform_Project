@@ -1,8 +1,7 @@
 .venv/
 .idx/
 .env
-ai_engine.log
+chroma_db/
 __pycache__/
 chroma_db/
 OLD/
-node_modules
